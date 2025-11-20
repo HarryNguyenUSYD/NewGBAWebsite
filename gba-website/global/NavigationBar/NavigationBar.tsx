@@ -2,13 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLanguage } from "../LanguageContext/LanguageContext";
-import { Momo_Trust_Display } from "next/font/google";
 import { useNavigationBar } from "./NavigationBarContext";
-
-const NavFont = Momo_Trust_Display({
-    subsets: ["latin", "vietnamese"],
-    weight: ["400"]
-});
+import { navFont } from "../fonts/fonts";
 
 export default function NavigationBar() {
     const languageContext = useLanguage();
@@ -23,7 +18,7 @@ export default function NavigationBar() {
             transition={{ duration: 0.2 }}
         >
             <CompanyLogo />
-            <div className="w-full h-auto flex flex-row justify-center items-center">
+            <div className="w-full h-auto ml-10 flex flex-row justify-start items-center">
                 <NavLink href="/">
                     {languageContext?.language == "en" ? "Projects" : "Dự Án"}
                 </NavLink>
@@ -46,7 +41,7 @@ export default function NavigationBar() {
 }
 
 const CompanyLogo = () => (
-    <div className="w-auto h-full flex flex-row justify-start items-center">
+    <div className="w-auto h-full flex flex-row justify-start items-center flex-none">
         <Link
             href={"/"}
             className="w-auto h-full object-cover flex flex-row justify-center items-center p-3 z-10 flex-none"
@@ -68,7 +63,7 @@ const NavLink = ({ href, children }: {
     >
         <Link
             href={href}
-            className={"w-full h-full flex flex-row justify-center items-center text-xl " + NavFont.className}>
+            className={`w-full h-full flex flex-row justify-center items-center text-xl ${navFont.className}`}>
             {children}
         </Link>
         <motion.div
