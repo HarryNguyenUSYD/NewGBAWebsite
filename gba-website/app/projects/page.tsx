@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import HomeMobile from "./components/HomeMobile";
-import HomeDesktop from "./components/HomeDesktop";
+import ProjectsMobile from "./components/ProjectsMobile";
+import ProjectsDesktop from "./components/ProjectsDesktop";
 
-export default function Home() {
+export default function Projects() {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -21,5 +21,5 @@ export default function Home() {
         return () => window.removeEventListener("resize", changeDeviceType);
     }, [])
 
-    return (isMobile ? <HomeMobile /> : <HomeDesktop />)
+    return (isMobile ? <ProjectsMobile /> : <ProjectsDesktop />)
 }

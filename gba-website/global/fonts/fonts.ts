@@ -1,13 +1,13 @@
-import { Geist, Geist_Mono, Markazi_Text, Momo_Trust_Display } from "next/font/google";
+import { Montserrat, Markazi_Text, Momo_Trust_Display, Bevan, Charm, Goldman } from "next/font/google";
 
-export const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+export const experienceFont = Charm({
+    weight: ["700"],
+    subsets: ["latin", "vietnamese"]
 });
 
-export const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+export const zilliaxFont = Goldman({
+    weight: ["700"],
+    subsets: ["latin", "vietnamese"]
 });
 
 export const textFont = Markazi_Text({
@@ -16,8 +16,19 @@ export const textFont = Markazi_Text({
     subsets: ["latin", "vietnamese"]
 });
 
+export const titleFont = Bevan({
+    variable: "--font-title",
+    weight: ["400"],
+    subsets: ["latin", "vietnamese"]
+});
+
 export const navFont = Momo_Trust_Display({
     variable: "--font-nav",
     subsets: ["latin", "vietnamese"],
     weight: ["400"]
+});
+
+export const projectFont = Montserrat({
+    weight: ["400", "700"],
+    subsets: ["latin", "vietnamese"]
 });

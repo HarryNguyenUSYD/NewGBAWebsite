@@ -1,3 +1,5 @@
+import scrollbar from 'tailwind-scrollbar';
+
 // tailwind.config.js
 module.exports = {
   content: [
@@ -12,5 +14,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    scrollbar
+  ],
 };
