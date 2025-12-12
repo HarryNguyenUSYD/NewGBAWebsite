@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { getLanguage, setLanguage } from "./localStorage";
 
-type Language = "en" | "vi";
+export type Language = "en" | "vi";
 
 interface LanguageContextInterface {
     language: Language,
@@ -12,9 +13,23 @@ interface LanguageContextInterface {
 const LanguageContext = createContext<LanguageContextInterface | null>(null);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en");
+  const [currentLanguage, setCurrentLanguage] = useState<Language>("en");
 
-  return <LanguageContext.Provider value={{ language, setLanguage }}>{children}</LanguageContext.Provider>;
+    useEffect(() => {
+        const stored = getLanguage();
+        if (stored === "en" || stored === "vi") {
+            setLanguage(stored);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setCurrentLanguage(stored);
+        }
+    }, []);
+
+  const storeLanguage = (language: Language) => {
+    setCurrentLanguage(language);
+    setLanguage(language);
+  }
+
+  return <LanguageContext.Provider value={{ language: currentLanguage, setLanguage: storeLanguage }}>{children}</LanguageContext.Provider>;
 }
 
 export function useLanguage() {

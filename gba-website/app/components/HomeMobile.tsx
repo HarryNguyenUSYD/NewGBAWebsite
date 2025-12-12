@@ -16,7 +16,7 @@ import Link from "next/link";
 import { experienceFont, navFont, titleFont, zilliaxFont } from "@/global/fonts/fonts";
 
 
-export default function Home() {    
+export default function Home() {
     return (
         <SiteWrapper topMargin={false} isHomepage={true}>
             <BannerSection />
@@ -26,7 +26,7 @@ export default function Home() {
             <WhyUsSection />
             <ClientsSection />
             <BulletinSection />
-            {/* <ContactUsSection /> */}
+            <ContactUsSection />
         </SiteWrapper>
     );
 }
@@ -78,8 +78,10 @@ const BannerBackground = ({ index } : { index: number }) => {
             }
 
             setOpacity((height - window.innerHeight / 4) / (window.innerHeight / 2));
+
+            console.log(navigationBarContext?.visible);
         }
-    
+
         window.addEventListener("scroll", onScroll);
 
         return () => {
@@ -652,16 +654,16 @@ const BulletinSection = () => {
     return (
         <div
             id="bulletin"
-            className="relative w-full h-screen bg-white px-10 py-10 flex flex-col justify-between items-center"
+            className="relative w-full h-[150vh] bg-white px-10 py-10 flex flex-col justify-between items-center"
         >
             {/* Newest Article */}
-            <div className="w-[50%] h-full flex flex-col justify-between items-center">
+            <div className="w-full h-1/2 flex flex-col justify-between items-center">
                 <div className="w-full h-auto flex flex-row justify-between items-end">
-                    <p className={`text-5xl text-gray-800 ${titleFont.className}`}>
+                    <p className={`text-3xl text-gray-800 ${titleFont.className}`}>
                         {languageContext?.language == "en" ? "Articles" : "Tin tức"}
                     </p>
                     <Link
-                        className="text-3xl border-2 px-5 text-gray-800 border-gray-800 whitespace-nowrap
+                        className="text-xl border-2 px-5 text-gray-800 border-gray-800 whitespace-nowrap
                         hover:bg-gray-800 hover:text-white duration-150"
                         href="/"                    
                     >
@@ -691,79 +693,75 @@ const BulletinSection = () => {
                     })}
                 </div>
             </div>
-            <div className="relative w-[50%] h-full ml-10 flex flex-row justify-between items-center">
+            <div className="relative w-full h-1/2 mt-10 flex flex-col justify-center items-center gap-5">
                 {/* Newest Project */}
-                <div className="relative w-full h-[55%]">
-                    <Link
-                        href={"/"}
-                        className="w-full h-full group"
-                    >
-                        <div className="absolute z-10 top-5 left-5 flex flex-row justify-start items-center gap-5">
-                            <div className="h-10 border-4 border-red-500"></div>
-                            <p className={`text-4xl ${titleFont.className}`}>
-                                {languageContext?.language == "en" ? "Newest Project" : "Dự án mới nhất"}
-                            </p>
-                        </div>
-                        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-                            <Image
-                                src={"/test/diningbg.png"}
-                                width={4992}
-                                height={2995}
-                                className="w-full h-full object-cover brightness-30 shadow-lg/50
-                                    group-hover:scale-120 duration-150"
-                                alt="Newest Project Background"
-                            />
-                        </div>
-                        <p className="absolute bottom-5 left-5 z-10 text-4xl">Dining Room</p>
-                    </Link>
-                </div>
+                <Link
+                    href={"/"}
+                    className="relative w-full h-1/2 group"
+                >
+                    <div className="absolute z-10 top-5 left-5 flex flex-row justify-start items-center gap-5">
+                        <div className="h-8 border-4 border-red-500"></div>
+                        <p className={`text-2xl ${titleFont.className}`}>
+                            {languageContext?.language == "en" ? "Newest Project" : "Dự án mới nhất"}
+                        </p>
+                    </div>
+                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+                        <Image
+                            src={"/test/diningbg.png"}
+                            width={4992}
+                            height={2995}
+                            className="w-full h-full object-cover brightness-30 shadow-lg/50
+                                group-hover:scale-120 duration-150"
+                            alt="Newest Project Background"
+                        />
+                    </div>
+                    <p className="absolute bottom-3 left-5 z-10 text-2xl">Dining Room</p>
+                </Link>
                 {/* Compliments */}
-                <div className="relative w-full h-[35%] flex flex-row justify-between items-center">
-                    <Link
-                        href={"/"}
-                        className="relative w-[45%] h-full bg-gray-700 shadow-lg/50 hover:bg-black duration-200 cursor-pointer group"
-                    >
-                        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-                            <Image
-                                src="/test/ais-award.jpg"
-                                width={800}
-                                height={1067}
-                                alt="AIS award"
-                                className="w-full h-full object-cover brightness-30 shadow-lg/50
-                                    group-hover:scale-120 duration-150"
-                            />
-                        </div>
-                        <div className="absolute top-5 left-5 flex flex-row justify-start items-center gap-3">
-                            <div className="h-8 border-4 border-red-500"></div>
-                            <p className={`text-4xl text-left font-semibold`}>
-                                {languageContext?.language == "en" ? "Awards" : "Khen thưởng"}
-                            </p>
-                        </div>
-                        <p className="absolute bottom-5 left-5 text-4xl">AIS Platinum Sponsor Award</p>
-                    </Link>
-                    <Link
-                        href={"/"}
-                        className="relative w-[45%] h-full bg-red-500 shadow-lg/50 hover:bg-black duration-200 cursor-pointer group"
-                    >
-                        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-                            <Image
-                                src="/test/ais-award.jpg"
-                                width={800}
-                                height={1067}
-                                alt="AIS award"
-                                className="w-full h-full object-cover brightness-30 shadow-lg/50
-                                    group-hover:scale-120 duration-150"
-                            />
-                        </div>
-                        <div className="absolute top-5 left-5 flex flex-row justify-start items-center gap-3">
-                            <div className="h-8 border-4 border-red-500"></div>
-                            <p className={`text-4xl text-left font-semibold`}>
-                                {languageContext?.language == "en" ? "Events" : "Sự kiện"}
-                            </p>
-                        </div>
-                        <p className="absolute bottom-5 left-5 text-4xl">Company Trip 12/2025</p>
-                    </Link>
-                </div>
+                <Link
+                    href={"/"}
+                    className="relative w-full h-1/4 bg-gray-700 shadow-lg/50 hover:bg-black duration-200 cursor-pointer group"
+                >
+                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+                        <Image
+                            src="/test/ais-award.jpg"
+                            width={800}
+                            height={1067}
+                            alt="AIS award"
+                            className="w-full h-full object-cover brightness-30 shadow-lg/50
+                                group-hover:scale-120 duration-150"
+                        />
+                    </div>
+                    <div className="absolute top-3 left-5 flex flex-row justify-start items-center gap-3">
+                        <div className="h-6 border-4 border-red-500"></div>
+                        <p className={`text-2xl text-left font-semibold`}>
+                            {languageContext?.language == "en" ? "Awards" : "Khen thưởng"}
+                        </p>
+                    </div>
+                    <p className="absolute bottom-3 left-5 text-2xl">AIS Platinum Sponsor Award</p>
+                </Link>
+                <Link
+                    href={"/"}
+                    className="relative w-full h-1/4 bg-red-500 shadow-lg/50 hover:bg-black duration-200 cursor-pointer group"
+                >
+                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+                        <Image
+                            src="/test/ais-award.jpg"
+                            width={800}
+                            height={1067}
+                            alt="AIS award"
+                            className="w-full h-full object-cover brightness-30 shadow-lg/50
+                                group-hover:scale-120 duration-150"
+                        />
+                    </div>
+                    <div className="absolute top-3 left-5 flex flex-row justify-start items-center gap-3">
+                        <div className="h-6 border-4 border-red-500"></div>
+                        <p className={`text-2xl text-left font-semibold`}>
+                            {languageContext?.language == "en" ? "Events" : "Sự kiện"}
+                        </p>
+                    </div>
+                    <p className="absolute bottom-3 left-5 text-2xl">Company Trip 12/2025</p>
+                </Link>
             </div>
         </div>
     )
@@ -775,7 +773,7 @@ const ContactUsSection = () => {
     return (
         <div
             id="contact-us"
-            className="relative w-full h-[40vh] flex flex-row justify-between items-center overflow-hidden"
+            className="relative w-full h-auto flex flex-col justify-between items-center overflow-hidden"
         >
             <Image
                 src={"/test/diningbg.png"}
@@ -784,54 +782,54 @@ const ContactUsSection = () => {
                 height={2995}
                 className="absolute w-full h-full object-cover brightness-30 shadow-lg/50"
             />
-            <div className="relative w-full h-full flex flex-row justify-between items-center">
-                <p className={`text-5xl w-[20%] text-center leading-15 ${titleFont.className}`}>
+            <div className="relative w-full h-full py-10 flex flex-col justify-center items-center gap-5">
+                <p className={`text-3xl w-full text-center ${titleFont.className}`}>
                     {languageContext?.language == "en" ? "Get In Touch" : "Liên Hệ Chúng Tôi"}
                 </p>
-                <div className="w-0 h-[80%] mx-10 border-2 border-red-500"></div>
-                <div className="w-[50%] h-full flex flex-col justify-center items-start gap-5">
-                    <p className="text-5xl">{languageContext?.language == "en" ? "Head Office" : "Văn phòng chính"}</p>
-                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                <div className="w-[80%] border-2 border-red-500"></div>
+                <div className="w-full h-auto px-10 flex flex-col justify-center items-start gap-3">
+                    <p className="text-2xl">{languageContext?.language == "en" ? "Head Office" : "Văn phòng chính"}</p>
+                    <div className="text-xl flex flex-row justify-start items-center gap-3">
                         <PiMapPin className="flex-none" />
                         <p>
                             {languageContext?.language == "en" ? "88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" :
                                 "88 Thích Quảng Đức, Quận 5, Phường Phú Nhuận, Thành phố Hồ Chí Minh"}
                         </p>
                     </div>
-                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                    <div className="text-xl flex flex-row justify-start items-center gap-3">
                         <HiOutlineMail className="flex-none" />
                         <p>
                             sales@gba.vn
                         </p>
                     </div>
-                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                    <div className="text-xl flex flex-row justify-start items-center gap-3">
                         <FiPhone className="flex-none" />
                         <p>
                             +84 28 3535 5966 - +84 28 3535 5988
                         </p>
                     </div>
                 </div>
-                <div className="w-[25%] h-full flex flex-col justify-center items-center gap-5">
-                    <p className="text-5xl">{languageContext?.language == "en" ? "Follow us" : "Theo dõi chúng tôi"}</p>
-                    <div className="w-full h-auto flex flex-row justify-center items-center gap-5">
+                <div className="w-full h-full px-10 flex flex-row justify-center items-center gap-5">
+                    <p className="text-2xl">{languageContext?.language == "en" ? "Follow us" : "Theo dõi chúng tôi"}</p>
+                    <div className="w-auto h-auto flex flex-row justify-center items-center gap-5">
                         <Link
                             href="https://www.facebook.com/gbavn"
                             target="_blank"
-                            className="text-4xl hover:text-red-500 duration-150"
+                            className="text-2xl"
                         >
                             <FaFacebook />
                         </Link>
                         <Link
                             href="https://www.linkedin.com/in/global-brother-associates-co-ltd-design-and-build-435446339/"
                             target="_blank"
-                            className="text-4xl hover:text-red-500 duration-150"
+                            className="text-2xl"
                         >
                             <FaLinkedin />
                         </Link>
                         <Link
                             href="https://maps.app.goo.gl/WQ2P8WYXbQtsznZc6"
                             target="_blank"
-                            className="text-4xl hover:text-red-500 duration-150"
+                            className="text-2xl"
                         >
                             <FaMapMarkedAlt />
                         </Link>

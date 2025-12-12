@@ -61,6 +61,7 @@ const BannerBackground = ({ index } : { index: number }) => {
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setHeight(window.innerHeight);
+        navigationBarContext?.setVisible(false);
     }, []);
 
     useEffect(() => {
