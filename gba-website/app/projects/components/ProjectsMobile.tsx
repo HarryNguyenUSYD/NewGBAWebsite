@@ -319,9 +319,9 @@ const PageSection = ({ currentValue, maxValue }: { currentValue: number, maxValu
 
 const ListSection = () => {
     return (
-        <div className="w-full h-auto mb-10 bg-white flex flex-col justify-start items-center gap-5">
+        <div className="w-full h-auto mb-10 bg-white flex flex-col justify-start items-center gap-10">
             {Array.from({ length: 9 }, (_, i) => i + 1).map((_, i) => (
-                <ProjectPreview key={i} project={null} isLeft={i % 2 == 0} />
+                <ProjectPreview key={i} project={null} isEven={i % 2 == 0} />
             ))}
         </div>
     )

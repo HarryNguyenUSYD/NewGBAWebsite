@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { useLanguage } from "../LanguageContext/LanguageContext";
 import { FaFacebook, FaLinkedin, FaMapMarkedAlt } from "react-icons/fa";
+import { HiOutlineMail } from "react-icons/hi";
+import { FiPhone } from "react-icons/fi";
+import { PiMapPin } from "react-icons/pi";
 
 interface FooterProps {
     text: string,
@@ -8,7 +11,7 @@ interface FooterProps {
 }
 
 const FooterColumn = ({ title, propList }: { title: string, propList: FooterProps[] }) => (
-    <div className="w-auto h-full flex flex-col justify-start items-start gap-1">
+    <div className="w-[25%] h-full flex-none flex flex-col justify-start items-start gap-1">
         <p className="text-2xl">{title}</p>
         <div className="w-full border border-white"></div>
         {propList.map((props, i) => ( <FooterLink key={`footer_column_${title}_${i}`} props={props} /> ))}
@@ -43,15 +46,25 @@ export default function Footer() {
                         {languageContext?.language == "en" ? "Get In Touch" : "Liên Hệ Chúng Tôi"}
                     </p>
                     <div className="w-full border border-white"></div>
-                    <p className="text-lg">
-                        {languageContext?.language == "en" ? "Address: 88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" : "Địa chỉ: 88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC"}
-                    </p>
-                    <p className="text-lg">
-                        {languageContext?.language == "en" ? "Email: sales@gba.vn" : "Email: sales@gba.vn"}
-                    </p>
-                    <p className="text-lg">
-                        {languageContext?.language == "en" ? "Mobile: +84 28 3535 5966 - +84 28 3535 5988" : "SĐT: +84 28 3535 5966 - +84 28 3535 5988"}
-                    </p>
+                    <div className="text-lg flex flex-row justify-start items-center gap-3">
+                        <PiMapPin className="flex-none" />
+                        <p>
+                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" :
+                                "88 Thích Quảng Đức, Quận 5, Phường Phú Nhuận, Thành phố Hồ Chí Minh"}
+                        </p>
+                    </div>
+                    <div className="text-lg flex flex-row justify-start items-center gap-3">
+                        <HiOutlineMail className="flex-none" />
+                        <p>
+                            sales@gba.vn
+                        </p>
+                    </div>
+                    <div className="text-lg flex flex-row justify-start items-center gap-3">
+                        <FiPhone className="flex-none" />
+                        <p>
+                            +84 28 3535 5966 - +84 28 3535 5988
+                        </p>
+                    </div>
                 </div>
             </div>
             <div className="w-full h-auto my-2 flex flex-row justify-center items-center gap-5">

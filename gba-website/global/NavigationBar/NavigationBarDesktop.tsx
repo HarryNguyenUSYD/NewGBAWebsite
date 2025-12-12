@@ -54,16 +54,16 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
                     <NavLink href="/projects">
                         {languageContext?.language == "en" ? "Projects" : "Dự Án"}
                     </NavLink>
-                    <NavLink href="/">
+                    <NavLink href="/articles">
                         {languageContext?.language == "en" ? "Articles" : "Bài Báo"}
                     </NavLink>
-                    <NavLink href="/">
+                    <NavLink href="/clients">
                         {languageContext?.language == "en" ? "Clients" : "Khách Hàng"}
                     </NavLink>
-                    <NavLink href="/">
+                    <NavLink href="/partners">
                         {languageContext?.language == "en" ? "Partners" : "Đối Tác"}
                     </NavLink>
-                    <NavLink href="/">
+                    <NavLink href="/careers">
                         {languageContext?.language == "en" ? "Careers" : "Tuyển Dụng"}
                     </NavLink>
                 </div>

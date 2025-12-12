@@ -7,6 +7,9 @@ import { useLanguage } from "@/global/LanguageContext/LanguageContext";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FaFacebook, FaLinkedin, FaMapMarkedAlt } from "react-icons/fa";
 import { IoMdCheckboxOutline } from "react-icons/io";
+import { PiMapPin } from "react-icons/pi";
+import { FiPhone } from "react-icons/fi";
+import { HiOutlineMail } from "react-icons/hi";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useNavigationBar } from "@/global/NavigationBar/NavigationBarContext";
 import Link from "next/link";
@@ -497,7 +500,7 @@ const ProjectsSection = () => {
                             <p className="text-5xl text-shadow-lg">{projects[index].type}</p>
                             <Link
                                 href={"/"}
-                                className="text-2xl text-shadow-lg mb-0.5"
+                                className="text-2xl text-shadow-lg mb-0.5 underline underline-offset-4"
                             >
                                 {languageContext?.language == "en" ? "View details" : "Xem chi tiết"}
                             </Link>
@@ -797,17 +800,27 @@ const ContactUsSection = () => {
                     {languageContext?.language == "en" ? "Get In Touch" : "Liên Hệ Chúng Tôi"}
                 </p>
                 <div className="w-0 h-[80%] mx-10 border-2 border-red-500"></div>
-                <div className="w-[50%] h-full flex flex-col justify-center items-start">
+                <div className="w-[50%] h-full flex flex-col justify-center items-start gap-5">
                     <p className="text-5xl">{languageContext?.language == "en" ? "Head Office" : "Văn phòng chính"}</p>
-                    <p className="text-3xl">
-                        {languageContext?.language == "en" ? "Address: 88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" : "Địa chỉ: 88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC"}
-                    </p>
-                    <p className="text-3xl">
-                        {languageContext?.language == "en" ? "Email: sales@gba.vn" : "Email: sales@gba.vn"}
-                    </p>
-                    <p className="text-3xl">
-                        {languageContext?.language == "en" ? "Mobile: +84 28 3535 5966 - +84 28 3535 5988" : "SĐT: +84 28 3535 5966 - +84 28 3535 5988"}
-                    </p>
+                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                        <PiMapPin className="flex-none" />
+                        <p>
+                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" :
+                                "88 Thích Quảng Đức, Quận 5, Phường Phú Nhuận, Thành phố Hồ Chí Minh"}
+                        </p>
+                    </div>
+                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                        <HiOutlineMail className="flex-none" />
+                        <p>
+                            sales@gba.vn
+                        </p>
+                    </div>
+                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                        <FiPhone className="flex-none" />
+                        <p>
+                            +84 28 3535 5966 - +84 28 3535 5988
+                        </p>
+                    </div>
                 </div>
                 <div className="w-[25%] h-full flex flex-col justify-center items-center gap-5">
                     <p className="text-5xl">{languageContext?.language == "en" ? "Follow us" : "Theo dõi chúng tôi"}</p>

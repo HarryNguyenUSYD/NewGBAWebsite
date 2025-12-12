@@ -1,12 +1,15 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import SiteWrapper from "@/global/SiteWrapper/SiteWrapperDesktop";
+import SiteWrapper from "@/global/SiteWrapper/SiteWrapperMobile";
 import Image from "next/image";
 import { useLanguage } from "@/global/LanguageContext/LanguageContext";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FaFacebook, FaLinkedin, FaMapMarkedAlt } from "react-icons/fa";
 import { IoMdCheckboxOutline } from "react-icons/io";
+import { PiMapPin } from "react-icons/pi";
+import { FiPhone } from "react-icons/fi";
+import { HiOutlineMail } from "react-icons/hi";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useNavigationBar } from "@/global/NavigationBar/NavigationBarContext";
 import Link from "next/link";
@@ -23,7 +26,7 @@ export default function Home() {
             <WhyUsSection />
             <ClientsSection />
             <BulletinSection />
-            <ContactUsSection />
+            {/* <ContactUsSection /> */}
         </SiteWrapper>
     );
 }
@@ -50,13 +53,22 @@ const BannerBackground = ({ index } : { index: number }) => {
         <ZilliaxBanner key={"zilliax_banner"} />
     ]
 
-    const [height, setHeight] = useState(0);
+    const [height, setHeight] = useState(-1);
     const [opacity, setOpacity] = useState(1);
     const { scrollY } = useScroll();
     const navigationBarContext = useNavigationBar();
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setHeight(window.innerHeight);
+    }, []);
+
+    useEffect(() => {
         const onScroll = () => {
+            if (height < 0) {
+                setHeight(window.innerHeight);
+            }
+
             setHeight(Math.max(window.innerHeight - scrollY.get(), 0));
 
             if (height > window.innerHeight / 2) {
@@ -67,7 +79,7 @@ const BannerBackground = ({ index } : { index: number }) => {
 
             setOpacity((height - window.innerHeight / 4) / (window.innerHeight / 2));
         }
-
+    
         window.addEventListener("scroll", onScroll);
 
         return () => {
@@ -112,7 +124,7 @@ const ExperienceBanner = () => {
             <motion.img
                 key="experience_decor_1"  
                 src={"/test/decor.png"}
-                className="w-[40%] h-auto grayscale-100 brightness-200 scale-y-[-1] -mb-5"
+                className="w-[80%] h-auto grayscale-100 brightness-200 scale-y-[-1] -mb-5"
                 initial={{ opacity: 0, y: "20vh" }}
                 animate={{ opacity: 1, y: "0%" }}
                 exit={{ opacity: 0, y: "20vh" }}
@@ -122,7 +134,7 @@ const ExperienceBanner = () => {
                 <p>
                     <motion.span
                         key={"experience_number"}
-                        className="text-[13rem] leading-none whitespace-nowrap"
+                        className="text-[8rem] leading-none whitespace-nowrap"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -132,7 +144,7 @@ const ExperienceBanner = () => {
                     </motion.span>
                     <motion.span
                         key={"experience_text_1"}
-                        className="text-5xl leading-none whitespace-nowrap"
+                        className="text-3xl leading-none whitespace-nowrap"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -143,7 +155,7 @@ const ExperienceBanner = () => {
                 </p>
                 <motion.p
                     key={"experience_text_2"}
-                    className="text-5xl leading-none whitespace-nowrap"
+                    className="text-3xl leading-none whitespace-nowrap"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -155,7 +167,7 @@ const ExperienceBanner = () => {
             <motion.img
                 key="experience_decor_2"  
                 src={"/test/decor.png"}
-                className="w-[40%] h-auto grayscale-100 brightness-200"   
+                className="w-[80%] h-auto grayscale-100 brightness-200"   
                 initial={{ opacity: 0, y: "20vh" }}
                 animate={{ opacity: 1, y: "0%" }}
                 exit={{ opacity: 0, y: "20vh" }}
@@ -184,7 +196,7 @@ const ZilliaxBanner = () => {
                 }
             }}
         >
-            <div className="absolute w-auto h-auto flex flex-col justify-center items-start gap-10">
+            <div className="absolute w-auto h-auto flex flex-col justify-center items-start gap-5">
                 <div className="w-auto flex flex-row justify-start items-center gap-5">
                     <motion.div
                         key="zilliax_icon_1"
@@ -194,11 +206,11 @@ const ZilliaxBanner = () => {
                         exit={{ opacity: 0, x: "-20vw" }}
                         transition={{ duration: 0.75, type: "spring" }}
                     >
-                        <IoMdCheckboxOutline className="text-8xl" />
+                        <IoMdCheckboxOutline className="text-6xl" />
                     </motion.div>
                     <motion.p
                         key="zilliax_text_1"
-                        className="text-[5rem] leading-none whitespace-nowrap"
+                        className="text-[2rem] leading-none whitespace-nowrap"
                         initial={{ opacity: 0, x: "20vw" }}
                         animate={{ opacity: 1, x: "0%" }}
                         exit={{ opacity: 0, x: "20vw" }}
@@ -216,11 +228,11 @@ const ZilliaxBanner = () => {
                         exit={{ opacity: 0, x: "-20vw" }}
                         transition={{ duration: 0.75, type: "spring", delay: 0.25 }}
                     >
-                        <IoMdCheckboxOutline className="text-8xl" />
+                        <IoMdCheckboxOutline className="text-6xl" />
                     </motion.div>
                     <motion.p
                         key="zilliax_text_2"
-                        className="text-[5rem] leading-none whitespace-nowrap"
+                        className="text-[2rem] leading-none whitespace-nowrap"
                         initial={{ opacity: 0, x: "20vw" }}
                         animate={{ opacity: 1, x: "0%" }}
                         exit={{ opacity: 0, x: "20vw" }}
@@ -238,11 +250,11 @@ const ZilliaxBanner = () => {
                         exit={{ opacity: 0, x: "-20vw" }}
                         transition={{ duration: 0.75, type: "spring", delay: 0.5 }}
                     >
-                        <IoMdCheckboxOutline className="text-8xl" />
+                        <IoMdCheckboxOutline className="text-6xl" />
                     </motion.div>
                     <motion.p
                         key="zilliax_text_2"
-                        className="text-[5rem] leading-none whitespace-nowrap"
+                        className="text-[2rem] leading-none whitespace-nowrap"
                         initial={{ opacity: 0, x: "20vw" }}
                         animate={{ opacity: 1, x: "0%" }}
                         exit={{ opacity: 0, x: "20vw" }}
@@ -275,22 +287,22 @@ const AboutUsSection = () => {
     return (
         <div
             id="about-us"
-            className="w-full h-[80vh] px-40 py-10 bg-white flex flex-row justify-between items-center"
+            className="relative w-full h-[120vh] px-5 py-10 bg-white flex flex-col justify-between items-center"
         >
             <div
-                className={"relative w-[75%] mr-10 h-full flex flex-col justify-center items-start gap-10"}
+                className={"relative w-full h-[60%] mb-10 flex flex-col justify-center items-start gap-5 text-center"}
             >
                 <Image
                     src={"/test/diningbg.png"}
                     alt="Project Background"
                     width={4492}
                     height={2995}
-                    className="absolute w-auto h-full object-cover brightness-30 shadow-lg/50"
+                    className="absolute w-full h-full object-cover brightness-30 shadow-lg/50"
                 />
-                <p className={`w-full px-20 text-5xl text-white z-10 ${titleFont.className}`}>
+                <p className={`w-full text-2xl px-5 text-white z-10 ${titleFont.className}`}>
                     { languageContext?.language == "en" ? "About us" : "Về chúng tôi" }
                 </p>
-                <p className="w-full px-20 text-4xl text-white z-10">
+                <p className="w-full text-xl px-5 text-white z-10">
                 {
                     languageContext?.language == "en" ?
                     "Established in 2007, Global Brother Associates (GBA) is one of Vietnam's top design company focusing in Architecture, Interior Decoration, Construction, MEP works and Furniture Supply to Turnkey Projects."
@@ -299,21 +311,21 @@ const AboutUsSection = () => {
                 }
                 </p>
             </div>
-            <div className="h-[80%] border-2 border-red-500"></div>
-            <div className="w-[25%] ml-10 h-full flex flex-col justify-center items-center gap-10">
+            <div className="w-[80%] border-2 border-red-500"></div>
+            <div className="w-full mt-10 h-auto flex flex-col justify-center items-center gap-5">
                 <button
-                    className="w-full h-auto p-10 bg-gray-700 text-white flex flex-col justify-center items-start gap-5
+                    className="w-full h-auto p-10 bg-gray-700 text-white flex flex-col justify-center items-center gap-2
                     hover:bg-black duration-200 cursor-pointer shadow-lg/50"
                 >
-                    <p className="text-4xl text-left font-semibold">{languageContext?.language == "en" ? "Download our Company Profile" : "Hồ Sơ Năng Lực"}</p>
-                    <FaArrowRightLong className="text-4xl" />
+                    <p className="text-2xl text-left font-semibold">{languageContext?.language == "en" ? "Download our Company Profile" : "Hồ Sơ Năng Lực"}</p>
+                    <FaArrowRightLong className="text-2xl" />
                 </button>
                 <button
-                    className="w-full h-auto p-10 bg-red-500 text-white flex flex-col justify-center items-start gap-5
+                    className="w-full h-auto p-10 bg-red-500 text-white flex flex-col justify-center items-center gap-2
                     hover:bg-black duration-200 cursor-pointer shadow-lg/50"
                 >
-                    <p className="text-4xl text-left font-semibold">{languageContext?.language == "en" ? "See our ISO Certifications" : "Chứng chỉ ISO"}</p>
-                    <FaArrowRightLong className="text-4xl" />
+                    <p className="text-2xl text-left font-semibold">{languageContext?.language == "en" ? "See our ISO Certifications" : "Chứng chỉ ISO"}</p>
+                    <FaArrowRightLong className="text-2xl" />
                 </button>
             </div>
         </div>
@@ -322,24 +334,14 @@ const AboutUsSection = () => {
 
 const StatisticsFactoid = ({ value, desc }: { value: string, desc: string }) => {
     return (
-        <motion.div
-            whileHover={"hover"}
-            animate="initial"
-            className="relative w-1/5 aspect-2 bg-[#000000] p-5 pl-12 flex flex-col
-            justify-center items-start overflow-hidden shadow-lg/50"
+        <div
+            className="relative w-full h-[25vh] bg-[#000000] p-5 pl-8 flex flex-col
+                justify-center items-start overflow-hidden shadow-lg/50"
         >
-            <motion.div
-                className="absolute inset-0 bg-red-500"
-                variants={{
-                    initial: { x: "calc(-100% + 1rem)" },   // start off-screen
-                    hover: { x: "0%" }      // slide fully in
-                }}
-                transition={{ duration: 0.2 }}
-            >
-            </motion.div>
-            <p className="text-7xl z-10">{value}</p>
-            <p className="text-3xl z-10">{desc}</p>
-        </motion.div>
+            <div className="absolute left-0 top-0 w-3 h-full bg-red-500"></div>
+            <p className="text-5xl z-10">{value}</p>
+            <p className="text-2xl z-10">{desc}</p>
+        </div>
     )
 }
 
@@ -349,7 +351,7 @@ const StatisticsSection = () => {
     return (
         <div
             id={"statistics"}
-            className="w-full h-auto px-40 py-10 bg-white flex flex-row justify-between items-center"
+            className="w-full h-auto px-10 py-10 bg-white grid grid-cols-2 gap-5"
         >
             <StatisticsFactoid value="18+" desc={languageContext?.language == "en" ? "years of experience" : "năm kinh nghiệm"} />
             <StatisticsFactoid value="999+" desc={languageContext?.language == "en" ? "projects" : "dự án"} />
@@ -428,11 +430,11 @@ const ProjectsSection = () => {
                 className="w-full h-full object-cover brightness-80"
             />
             {/* Top Right Corner Navigator */}
-            <div className="absolute w-auto h-auto top-0 right-0 mt-10 mr-10 flex flex-col justify-start items-end">
+            <div className="absolute w-auto h-auto top-0 right-0 mt-5 mr-5 flex flex-col justify-start items-end">
                 <div className="w-auto h-auto flex flex-row justify-start items-end">
                     {projects.slice(0, 3).map((_, i) => (
                         <button
-                            className={`size-20 m-2 border-4 flex justify-center items-center
+                            className={`size-15 m-2 border-4 flex justify-center items-center
                             ${index == i ? "bg-red-500" : "bg-transparent"} border-red-500 text-white
                             hover:bg-red-500 duration-150 cursor-pointer`}
                             key={`project_top_${i}`}
@@ -441,14 +443,14 @@ const ProjectsSection = () => {
                                 setIndex(i);
                             }}
                         >
-                            <p className={`text-4xl ${navFont.className}`}>{`0${i + 1}`}</p>
+                            <p className={`text-2xl ${navFont.className}`}>{`0${i + 1}`}</p>
                         </button>
                     ))}
                 </div>
                 <div className="w-auto h-auto flex flex-row justify-start items-end">
                     {projects.slice(3, projects.length).map((_, i) => (
                         <button
-                            className={`size-20 m-2 border-4 flex justify-center items-center
+                            className={`size-15 m-2 border-4 flex justify-center items-center
                             ${index == i + 3 ? "bg-red-500" : "bg-transparent"} border-red-500 text-white
                             hover:bg-red-500 duration-150 cursor-pointer`}
                             key={`project_top_${i + 3}`}
@@ -457,23 +459,23 @@ const ProjectsSection = () => {
                                 setIndex(i + 3);
                             }}
                         >
-                            <p className={`text-4xl ${navFont.className}`}>{`0${i + 4}`}</p>
+                            <p className={`text-2xl ${navFont.className}`}>{`0${i + 4}`}</p>
                         </button>
                     ))}
                 </div>
             </div>
             {/* Bottom Right URL */}
-            <div className="absolute w-auto h-auto bottom-0 right-0 mb-10 mr-10">
+            <div className="absolute w-auto h-auto bottom-0 right-0 mb-5 mr-5">
                 <Link
                     href={"/projects"}
                     className="px-5 border-2 border-white bg-transparent
-                    hover:bg-white hover:text-black duration-150 text-4xl"
+                        hover:bg-white hover:text-black duration-150 text-2xl"
                 >
                     {languageContext?.language == "en" ? "See More" : "Xem thêm"}
                 </Link>
             </div>
             {/* Bottom Left Information */}
-            <div className="absolute w-auto h-auto bottom-0 left-0 mb-10 ml-10">
+            <div className="absolute w-auto h-auto bottom-0 left-0 mb-5 ml-5">
                 <AnimatePresence mode="wait">
                     <motion.div
                         className="flex flex-col justify-start items-start"
@@ -483,21 +485,19 @@ const ProjectsSection = () => {
                         exit={{ x: -40, opacity: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <p className={`text-6xl text-shadow-lg ${titleFont.className}`}>{projects[index].name}</p>
-                        <div className="w-auto flex flex-row justify-start items-end gap-20">
-                            <p className="text-5xl text-shadow-lg">{projects[index].type}</p>
-                            <Link
-                                href={"/"}
-                                className="text-2xl text-shadow-lg mb-0.5"
-                            >
-                                {languageContext?.language == "en" ? "View details" : "Xem chi tiết"}
-                            </Link>
-                        </div>
+                        <p className={`text-3xl text-shadow-lg ${titleFont.className}`}>{projects[index].name}</p>
+                        <p className="text-2xl text-shadow-lg">{projects[index].type}</p>
+                        <Link
+                            href={"/"}
+                            className="text-lg text-shadow-lg mb-0.5 underline underline-offset-4"
+                        >
+                            {languageContext?.language == "en" ? "View details" : "Xem chi tiết"}
+                        </Link>
                     </motion.div>
                 </AnimatePresence>
             </div>
             {/* Timer */}
-            <div className="absolute bottom-0 h-2 w-full bg-black">
+            <div className="absolute bottom-0 h-1 w-full bg-black">
                 <motion.div
                     className="h-full flex-none bg-red-500"
                     animate={{ width: timerWidth }}
@@ -513,10 +513,9 @@ const WhyUsFactoid = ({ title, desc, bg }: {
     bg: string
 }) => {
     return (
-        <motion.div
-            className="relative w-[25%] h-full bg-[#000000] flex flex-col
-            justify-center items-center text-center overflow-hidden shadow-lg/50
-            group group-hover:opacity-30 hover:w-[50%] hover:opacity-100! duration-150"
+        <div
+            className="relative w-full h-[25%] flex flex-col
+            justify-center items-center text-center overflow-hidden shadow-lg/50"
         >
             <div className="absolute w-full h-full overflow-hidden">
                 <Image
@@ -527,10 +526,10 @@ const WhyUsFactoid = ({ title, desc, bg }: {
                     className="absolute w-full h-full object-cover brightness-30 group-hover:scale-120 duration-150"
                 />
             </div>
-            <p className={`p-5 text-4xl z-10 ${titleFont.className}`}>{title}</p>
-            <div className="w-[80%] border border-white opacity-80"></div>
-            <p className="p-5 text-3xl z-10 text-center">{desc}</p>
-        </motion.div>
+            <p className={`px-5 text-2xl z-10 ${titleFont.className}`}>{title}</p>
+            <div className="w-[80%] border border-white opacity-80 my-2"></div>
+            <p className="px-5 text-xl z-10 text-center">{desc}</p>
+        </div>
     )
 }
 
@@ -540,9 +539,9 @@ const WhyUsSection = () => {
     return (
         <div
             id="why-us"
-            className="w-full h-[80vh] px-30 py-10 bg-white"
+            className="w-full h-[120vh] px-10 py-10 bg-white"
         >
-            <div className="w-auto h-full flex flex-row justify-center items-center gap-10 group">
+            <div className="w-auto h-full flex flex-col justify-center items-center gap-10 group">
                 <WhyUsFactoid
                     title={languageContext?.language == "en" ? "Services" : "Dịch Vụ"}
                     desc="One of Vietnam's premier companies in design and build."
@@ -579,7 +578,7 @@ const ClientsSection = () => {
     return (
         <div 
             id="clients"
-            className="relative w-full h-[40vh] flex flex-row justify-between items-center overflow-hidden"
+            className="relative w-full h-[60vh] flex flex-col justify-between items-center overflow-hidden"
         >
             <Image
                 src={"/test/diningbg.png"}
@@ -588,23 +587,25 @@ const ClientsSection = () => {
                 height={2995}
                 className="absolute w-full h-full object-cover brightness-30 shadow-lg/50"
             />
-            <div className="relative w-full h-full flex flex-row justify-between items-center">
-                <div className="w-[30%] h-full flex flex-col justify-center items-center gap-10">
-                    <p className={`text-5xl text-center ${titleFont.className}`}>{languageContext?.language == "en" ? "Our clients" : "Khách hàng thân thiết"}</p>
+            <div className="relative w-full h-full flex flex-col justify-between items-center">
+                <div className="w-full h-[30%] flex flex-col justify-around items-center my-5">
+                    <p className={`text-4xl text-left ${titleFont.className}`}>
+                        {languageContext?.language == "en" ? "Our clients" : "Khách hàng thân thiết"}
+                    </p>
                     <Link
-                        className="text-3xl border-2 px-5 border-white hover:bg-white hover:text-black duration-150"
+                        className="text-2xl border-2 px-5 border-white hover:bg-white hover:text-black duration-150"
                         href="/"
                     >
                         {languageContext?.language == "en" ? "See more" : "Xem thêm"}
                     </Link>
                 </div>
-                <div className="h-[80%] border-2 border-red-500"></div>
+                <div className="w-[80%] border-2 border-red-500"></div>
                 <motion.div
-                    className="w-full h-full flex flex-row justify-between items-center overflow-hidden"
+                    className="w-full h-[70%] flex flex-row justify-between items-center overflow-hidden"
                 >
                     {[...clientList, ...clientList].map((client, i) => (
                         <motion.div
-                            className="relative w-[33.3%] h-full flex justify-start items-center flex-none"
+                            className="relative w-full h-full flex justify-start items-center flex-none"
                             key={"client_" + i}
                             animate={{ x: ["0%", "-300%"] }}
                             transition={{
@@ -651,10 +652,10 @@ const BulletinSection = () => {
     return (
         <div
             id="bulletin"
-            className="relative w-full h-screen bg-white px-40 py-10 flex flex-row justify-between items-center"
+            className="relative w-full h-screen bg-white px-10 py-10 flex flex-col justify-between items-center"
         >
             {/* Newest Article */}
-            <div className="w-[50%] h-full mr-10 flex flex-col justify-between items-center">
+            <div className="w-[50%] h-full flex flex-col justify-between items-center">
                 <div className="w-full h-auto flex flex-row justify-between items-end">
                     <p className={`text-5xl text-gray-800 ${titleFont.className}`}>
                         {languageContext?.language == "en" ? "Articles" : "Tin tức"}
@@ -690,7 +691,7 @@ const BulletinSection = () => {
                     })}
                 </div>
             </div>
-            <div className="relative w-[50%] h-full ml-10 flex flex-col justify-between items-center">
+            <div className="relative w-[50%] h-full ml-10 flex flex-row justify-between items-center">
                 {/* Newest Project */}
                 <div className="relative w-full h-[55%]">
                     <Link
@@ -788,17 +789,27 @@ const ContactUsSection = () => {
                     {languageContext?.language == "en" ? "Get In Touch" : "Liên Hệ Chúng Tôi"}
                 </p>
                 <div className="w-0 h-[80%] mx-10 border-2 border-red-500"></div>
-                <div className="w-[50%] h-full flex flex-col justify-center items-start">
+                <div className="w-[50%] h-full flex flex-col justify-center items-start gap-5">
                     <p className="text-5xl">{languageContext?.language == "en" ? "Head Office" : "Văn phòng chính"}</p>
-                    <p className="text-3xl">
-                        {languageContext?.language == "en" ? "Address: 88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" : "Địa chỉ: 88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC"}
-                    </p>
-                    <p className="text-3xl">
-                        {languageContext?.language == "en" ? "Email: sales@gba.vn" : "Email: sales@gba.vn"}
-                    </p>
-                    <p className="text-3xl">
-                        {languageContext?.language == "en" ? "Mobile: +84 28 3535 5966 - +84 28 3535 5988" : "SĐT: +84 28 3535 5966 - +84 28 3535 5988"}
-                    </p>
+                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                        <PiMapPin className="flex-none" />
+                        <p>
+                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" :
+                                "88 Thích Quảng Đức, Quận 5, Phường Phú Nhuận, Thành phố Hồ Chí Minh"}
+                        </p>
+                    </div>
+                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                        <HiOutlineMail className="flex-none" />
+                        <p>
+                            sales@gba.vn
+                        </p>
+                    </div>
+                    <div className="text-3xl flex flex-row justify-start items-center gap-3">
+                        <FiPhone className="flex-none" />
+                        <p>
+                            +84 28 3535 5966 - +84 28 3535 5988
+                        </p>
+                    </div>
                 </div>
                 <div className="w-[25%] h-full flex flex-col justify-center items-center gap-5">
                     <p className="text-5xl">{languageContext?.language == "en" ? "Follow us" : "Theo dõi chúng tôi"}</p>

@@ -1,34 +1,20 @@
+import { Project } from "@/backend/tables"
 import { projectFont } from "@/global/fonts/fonts"
 import { useLanguage } from "@/global/LanguageContext/LanguageContext"
 import { motion } from "framer-motion"
 import Image from "next/image"
 
-export interface ProjectInfo {
-    name: string,
-    id: string,
-    startDate: string,
-    endDate: string,
-    clientName: string,
-    serviceType: string,
-    siteAddress: string,
-    scale: number,
-    projectType: string,
-    folderName: string,
-    coverImage: string,
-    images: string[]
-}
-
-export const ProjectPreview = ({ project, isLeft }: { project: ProjectInfo | null, isLeft: boolean }) => {
+export const ProjectPreview = ({ project, isEven }: { project: Project | null, isEven: boolean }) => {
     const languageContext = useLanguage();
 
     return (
         <motion.a
-            href={"/"}
+            href={"/projects/project"}
             className="relative w-[70vw] h-[60vh] group mt-25 flex flex-row justify-between items-center"
             animate="initial"
             whileHover="hover"
         >
-            {!isLeft && (
+            {!isEven && (
                 <motion.div
                     className={`relative w-[25vw] h-[80%] p-5 overflow-hidden
                         bg-gray-700 text-white flex flex-col justify-center items-start z-20 ${projectFont.className}`}
@@ -41,7 +27,7 @@ export const ProjectPreview = ({ project, isLeft }: { project: ProjectInfo | nul
                         <span>Education</span>
                     </p>
                     <p className="text-lg">
-                        <span className="font-bold">{languageContext?.language == "en" ? "Address: " : "Tên dự án: "}</span>
+                        <span className="font-bold">{languageContext?.language == "en" ? "Address: " : "Địa chỉ: "}</span>
                         <span>Project Title Number 1</span>
                     </p>
                     <p className="text-lg">
@@ -108,7 +94,7 @@ export const ProjectPreview = ({ project, isLeft }: { project: ProjectInfo | nul
                     <div className="w-full h-full bg-gray-500"></div>
                 </motion.div>
                 <motion.div
-                    className="absolute bottom-9 left-9 w-full h-full border-4 p-3 border-black bg-white
+                    className="absolute w-full h-full border-4 p-3 border-black bg-white
                         group-hover:border-red-500 duration-150 z-0 opacity-25"
                     initial={{
                         rotate: 0,
@@ -127,7 +113,7 @@ export const ProjectPreview = ({ project, isLeft }: { project: ProjectInfo | nul
                     <div className="w-full h-full bg-gray-500"></div>
                 </motion.div>
             </div>
-            {isLeft && (
+            {isEven && (
                 <motion.div
                     className={`relative w-[25vw] h-[80%] p-5 overflow-hidden
                         bg-red-500 text-white flex flex-col justify-center items-start z-20 ${projectFont.className}`}
