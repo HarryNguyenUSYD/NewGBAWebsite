@@ -14,9 +14,11 @@ import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useNavigationBar } from "@/global/NavigationBar/NavigationBarContext";
 import Link from "next/link";
 import { experienceFont, navFont, titleFont, zilliaxFont } from "@/global/fonts/fonts";
+import { fetchArticles, fetchImageOrFile } from "@/backend/fetchFunctions";
+import type { ArticlesType } from "@/backend/tables";
 
 
-export default function Home() {    
+export default function Home() {
     return (
         <SiteWrapper topMargin={false} isHomepage={true}>
             <BannerSection />
@@ -59,9 +61,9 @@ const BannerBackground = ({ index } : { index: number }) => {
     const navigationBarContext = useNavigationBar();
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setHeight(window.innerHeight);
         navigationBarContext?.setVisible(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -286,12 +288,20 @@ const AboutUsSection = () => {
     const languageContext = useLanguage();
 
     return (
-        <div
+        <motion.div
             id="about-us"
             className="w-full h-[80vh] px-40 py-10 bg-white flex flex-row justify-between items-center"
+            initial="initial"
+            whileInView="inView"
+            viewport={{ amount: 0.25 }}
         >
-            <div
+            <motion.div
                 className={"relative w-[75%] mr-10 h-full flex flex-col justify-center items-start gap-10"}
+                variants={{
+                    initial: { translateX: "-20rem", opacity: 0 },
+                    inView: { translateX: "0", opacity: 1 }
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
             >
                 <Image
                     src={"/test/diningbg.png"}
@@ -311,35 +321,52 @@ const AboutUsSection = () => {
                     "Established in 2007, Global Brother Associates (GBA) is one of Vietnam's top design company focusing in Architecture, Interior Decoration, Construction, MEP works and Furniture Supply to Turnkey Projects."
                 }
                 </p>
-            </div>
+            </motion.div>
             <div className="h-[80%] border-2 border-red-500"></div>
-            <div className="w-[25%] ml-10 h-full flex flex-col justify-center items-center gap-10">
-                <button
+            <motion.div
+                className="w-[25%] ml-10 h-full flex flex-col justify-center items-center gap-10"
+                variants={{
+                    initial: { translateX: "20rem", opacity: 0 },
+                    inView: { translateX: "0", opacity: 1 }
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+                <Link
                     className="w-full h-auto p-10 bg-gray-700 text-white flex flex-col justify-center items-start gap-5
-                    hover:bg-black duration-200 cursor-pointer shadow-lg/50"
+                        hover:bg-black duration-200 cursor-pointer shadow-lg/50"
+                    target="_blank"
+                    href={fetchImageOrFile("gba-profile.pdf")}
                 >
-                    <p className="text-4xl text-left font-semibold">{languageContext?.language == "en" ? "Download our Company Profile" : "Hồ Sơ Năng Lực"}</p>
+                    <p className="text-4xl text-left font-semibold">{languageContext?.language == "en" ? "View our Company Profile" : "Hồ Sơ Năng Lực"}</p>
                     <FaArrowRightLong className="text-4xl" />
-                </button>
-                <button
+                </Link>
+                <Link
                     className="w-full h-auto p-10 bg-red-500 text-white flex flex-col justify-center items-start gap-5
-                    hover:bg-black duration-200 cursor-pointer shadow-lg/50"
+                        hover:bg-black duration-200 cursor-pointer shadow-lg/50"
+                    target="_blank"
+                    href={fetchImageOrFile("gba-profile.pdf")}
                 >
                     <p className="text-4xl text-left font-semibold">{languageContext?.language == "en" ? "See our ISO Certifications" : "Chứng chỉ ISO"}</p>
                     <FaArrowRightLong className="text-4xl" />
-                </button>
-            </div>
-        </div>
+                </Link>
+            </motion.div>
+        </motion.div>
     )
 }
 
-const StatisticsFactoid = ({ value, desc }: { value: string, desc: string }) => {
+const StatisticsFactoid = ({ value, desc, delay }: { value: string, desc: string, delay: number }) => {
     return (
         <motion.div
-            whileHover={"hover"}
-            animate="initial"
+            initial="initial"
+            whileHover="hover"
+            variants={{
+                initial: { translateY: "10rem", opacity: 0, transition: { delay: 0 } }
+            }}
+            whileInView={{ translateY: "0", opacity: 1 }}
             className="relative w-1/5 aspect-2 bg-[#000000] p-5 pl-12 flex flex-col
-            justify-center items-start overflow-hidden shadow-lg/50"
+                justify-center items-start overflow-hidden shadow-lg/50"
+            viewport={{ amount: 0.25 }}
+            transition={{ duration: 0.5, ease: "easeInOut", delay: delay }}
         >
             <motion.div
                 className="absolute inset-0 bg-red-500"
@@ -364,10 +391,26 @@ const StatisticsSection = () => {
             id={"statistics"}
             className="w-full h-auto px-40 py-10 bg-white flex flex-row justify-between items-center"
         >
-            <StatisticsFactoid value="18+" desc={languageContext?.language == "en" ? "years of experience" : "năm kinh nghiệm"} />
-            <StatisticsFactoid value="999+" desc={languageContext?.language == "en" ? "projects" : "dự án"} />
-            <StatisticsFactoid value="190+" desc={languageContext?.language == "en" ? "customers" : "khách hàng"} />
-            <StatisticsFactoid value="100+" desc={languageContext?.language == "en" ? "employees" : "nhân viên"} />
+            <StatisticsFactoid
+                value="18+"
+                desc={languageContext?.language == "en" ? "years of experience" : "năm kinh nghiệm"}
+                delay={0}
+            />
+            <StatisticsFactoid
+                value="999+"
+                desc={languageContext?.language == "en" ? "projects" : "dự án"}
+                delay={0.2}
+            />
+            <StatisticsFactoid
+                value="190+"
+                desc={languageContext?.language == "en" ? "customers" : "khách hàng"}
+                delay={0.4}
+            />
+            <StatisticsFactoid
+                value="100+"
+                desc={languageContext?.language == "en" ? "employees" : "nhân viên"}
+                delay={0.6}
+            />
         </div>
     )
 }
@@ -642,32 +685,31 @@ const ClientsSection = () => {
 const BulletinSection = () => {
     const languageContext = useLanguage();
 
-    const extractIframeAttributes = (html: string) => {
-        const get = (attr: string) => {
-            const regex = new RegExp(`${attr}="([^"]+)"`);
-            const match = html.match(regex);
-            return match ? match[1] : "";
-        };
+    const [articles, setArticles] = useState<ArticlesType | null>(null);
 
-        return {
-            src: get("src"),
-            height: get("height"),
-            width: get("width"),
-            title: get("title"),
-        };
-    }
-
-    const htmlSrcs = [
-        `<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7396767047617036288" height="984" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>`,
-    ]
+    useEffect(() => {
+        fetchArticles()
+            .then(setArticles)
+            .catch(console.error)
+    }, []);
 
     return (
-        <div
+        <motion.div
             id="bulletin"
             className="relative w-full h-screen bg-white px-40 py-10 flex flex-row justify-between items-center"
+            initial="initial"
+            whileInView="inView"
+            viewport={{ amount: 0.25 }}
         >
             {/* Newest Article */}
-            <div className="w-[50%] h-full mr-10 flex flex-col justify-between items-center">
+            <motion.div
+                className="w-[50%] h-full mr-10 flex flex-col justify-between items-center"
+                variants={{
+                    initial: { translateX: "-20rem", opacity: 0 },
+                    inView: { translateX: "0", opacity: 1 }
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
                 <div className="w-full h-auto flex flex-row justify-between items-end">
                     <p className={`text-5xl text-gray-800 ${titleFont.className}`}>
                         {languageContext?.language == "en" ? "Articles" : "Tin tức"}
@@ -675,39 +717,38 @@ const BulletinSection = () => {
                     <Link
                         className="text-3xl border-2 px-5 text-gray-800 border-gray-800 whitespace-nowrap
                         hover:bg-gray-800 hover:text-white duration-150"
-                        href="/"                    
+                        href="/articles"                    
                     >
                         {languageContext?.language == "en" ? "See more" : "Xem thêm"}
                     </Link>
                 </div>
                 <div className="w-full border-2 my-5 border-red-500"></div>
                 <div className="w-full h-full flex flex-row justify-around items-center">
-                    {htmlSrcs.map((src, i) => {
-                        const attributes = extractIframeAttributes(src);
-
-                        return (
-                            <div
-                                key={`article_${i}`}
-                                className="w-full h-full"
-                            >
-                                <iframe
-                                    src={attributes.src}
-                                    width={attributes.width}
-                                    height={attributes.height}
-                                    title={attributes.title}
-                                    className="w-full h-full"
-                                    allowFullScreen
-                                ></iframe>
-                            </div>
-                        );
-                    })}
+                    <div className="w-full h-full">
+                        <iframe
+                            src={articles?.iframes[0].src}
+                            width={articles?.iframes[0].width}
+                            height={articles?.iframes[0].height}
+                            title="LinkedIn Post"
+                            className="w-full h-full"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
                 </div>
-            </div>
-            <div className="relative w-[50%] h-full ml-10 flex flex-col justify-between items-center">
+            </motion.div>
+            <motion.div
+                className="relative w-[50%] h-full ml-10 flex flex-col justify-between items-center"
+                variants={{
+                    initial: { translateX: "20rem", opacity: 0 },
+                    inView: { translateX: "0", opacity: 1 }
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
                 {/* Newest Project */}
                 <div className="relative w-full h-[55%]">
                     <Link
-                        href={"/"}
+                        href={articles?.newestProject.url ?? "/"}
+                        target="_blank"
                         className="w-full h-full group"
                     >
                         <div className="absolute z-10 top-5 left-5 flex flex-row justify-start items-center gap-5">
@@ -718,29 +759,30 @@ const BulletinSection = () => {
                         </div>
                         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                             <Image
-                                src={"/test/diningbg.png"}
-                                width={4992}
-                                height={2995}
+                                src={fetchImageOrFile("Blogs/newest-project.jpg")}
+                                width={1080}
+                                height={1080}
                                 className="w-full h-full object-cover brightness-30 shadow-lg/50
                                     group-hover:scale-120 duration-150"
                                 alt="Newest Project Background"
                             />
                         </div>
-                        <p className="absolute bottom-5 left-5 z-10 text-4xl">Dining Room</p>
+                        <p className="absolute bottom-5 left-5 z-10 text-4xl">{articles?.newestProject.title}</p>
                     </Link>
                 </div>
                 {/* Compliments */}
                 <div className="relative w-full h-[35%] flex flex-row justify-between items-center">
                     <Link
-                        href={"/"}
+                        href={articles?.newestAward.url ?? "/"}
+                        target="_blank"
                         className="relative w-[45%] h-full bg-gray-700 shadow-lg/50 hover:bg-black duration-200 cursor-pointer group"
                     >
                         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                             <Image
-                                src="/test/ais-award.jpg"
-                                width={800}
-                                height={1067}
-                                alt="AIS award"
+                                src={fetchImageOrFile("Blogs/newest-award.jpg")}
+                                width={1080}
+                                height={1080}
+                                alt="Company Award"
                                 className="w-full h-full object-cover brightness-30 shadow-lg/50
                                     group-hover:scale-120 duration-150"
                             />
@@ -748,21 +790,22 @@ const BulletinSection = () => {
                         <div className="absolute top-5 left-5 flex flex-row justify-start items-center gap-3">
                             <div className="h-8 border-4 border-red-500"></div>
                             <p className={`text-4xl text-left font-semibold`}>
-                                {languageContext?.language == "en" ? "Awards" : "Khen thưởng"}
+                                {languageContext?.language == "en" ? "Recognition" : "Khen thưởng"}
                             </p>
                         </div>
-                        <p className="absolute bottom-5 left-5 text-4xl">AIS Platinum Sponsor Award</p>
+                        <p className="absolute bottom-5 left-5 text-4xl">{articles?.newestAward.title}</p>
                     </Link>
                     <Link
-                        href={"/"}
+                        href={articles?.newestEvent.url ?? "/"}
+                        target="_blank"
                         className="relative w-[45%] h-full bg-red-500 shadow-lg/50 hover:bg-black duration-200 cursor-pointer group"
                     >
                         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                             <Image
-                                src="/test/ais-award.jpg"
-                                width={800}
-                                height={1067}
-                                alt="AIS award"
+                                src={fetchImageOrFile("Blogs/newest-event.jpg")}
+                                width={1080}
+                                height={1080}
+                                alt="company Event"
                                 className="w-full h-full object-cover brightness-30 shadow-lg/50
                                     group-hover:scale-120 duration-150"
                             />
@@ -773,11 +816,11 @@ const BulletinSection = () => {
                                 {languageContext?.language == "en" ? "Events" : "Sự kiện"}
                             </p>
                         </div>
-                        <p className="absolute bottom-5 left-5 text-4xl">Company Trip 12/2025</p>
+                        <p className="absolute bottom-5 left-5 text-4xl">{articles?.newestEvent.title}</p>
                     </Link>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     )
 }
 

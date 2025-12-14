@@ -51,6 +51,9 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
             <div className="w-full h-(--navbar-height) flex flex-row justify-between items-center bg-black z-50">
                 <CompanyLogo />
                 <div className="w-full h-full ml-10 flex flex-row justify-start items-center">
+                    <NavLink href="/">
+                        {languageContext?.language == "en" ? "Homepage" : "Trang Chủ"}
+                    </NavLink>
                     <NavLink href="/projects">
                         {languageContext?.language == "en" ? "Projects" : "Dự Án"}
                     </NavLink>
@@ -59,9 +62,6 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
                     </NavLink>
                     <NavLink href="/clients">
                         {languageContext?.language == "en" ? "Clients" : "Khách Hàng"}
-                    </NavLink>
-                    <NavLink href="/partners">
-                        {languageContext?.language == "en" ? "Partners" : "Đối Tác"}
                     </NavLink>
                     <NavLink href="/careers">
                         {languageContext?.language == "en" ? "Careers" : "Tuyển Dụng"}
@@ -121,7 +121,7 @@ const NavLink = ({ href, children }: {
 }) => (
     <motion.div
         whileHover={"hover"}
-        className="relative w-40 h-full overflow-hidden flex justify-center items-center"
+        className="relative w-auto h-full px-8 overflow-hidden flex justify-center items-center"
         animate="initial"
     >
         <Link
@@ -181,7 +181,7 @@ const ContactUsButton = () => {
 
     return (
         <Link
-            href={"/"}
+            href={"/#contact-us"}
             className="w-auto h-auto flex flex-row justify-center items-center gap-4 my-5 px-5 py-1 rounded-full bg-red-700
             hover:text-gray-800 hover:bg-white duration-150"
         >

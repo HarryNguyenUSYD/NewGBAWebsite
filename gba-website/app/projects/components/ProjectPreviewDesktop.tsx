@@ -1,10 +1,10 @@
-import { Project } from "@/backend/tables"
+import { ProjectType } from "@/backend/tables"
 import { projectFont } from "@/global/fonts/fonts"
 import { useLanguage } from "@/global/LanguageContext/LanguageContext"
 import { motion } from "framer-motion"
 import Image from "next/image"
 
-export const ProjectPreview = ({ project, isEven }: { project: Project | null, isEven: boolean }) => {
+export const ProjectPreview = ({ project, isEven }: { project: ProjectType | null, isEven: boolean }) => {
     const languageContext = useLanguage();
 
     return (

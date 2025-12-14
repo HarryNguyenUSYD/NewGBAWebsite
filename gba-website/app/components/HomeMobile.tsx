@@ -14,6 +14,8 @@ import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useNavigationBar } from "@/global/NavigationBar/NavigationBarContext";
 import Link from "next/link";
 import { experienceFont, navFont, titleFont, zilliaxFont } from "@/global/fonts/fonts";
+import { fetchArticles, fetchImageOrFile } from "@/backend/fetchFunctions";
+import type { ArticlesType } from "@/backend/tables";
 
 
 export default function Home() {
@@ -315,20 +317,24 @@ const AboutUsSection = () => {
             </div>
             <div className="w-[80%] border-2 border-red-500"></div>
             <div className="w-full mt-10 h-auto flex flex-col justify-center items-center gap-5">
-                <button
+                <Link
                     className="w-full h-auto p-10 bg-gray-700 text-white flex flex-col justify-center items-center gap-2
-                    hover:bg-black duration-200 cursor-pointer shadow-lg/50"
+                        hover:bg-black duration-200 cursor-pointer shadow-lg/50"
+                    target="_blank"
+                    href={fetchImageOrFile("gba-profile.pdf")}
                 >
                     <p className="text-2xl text-left font-semibold">{languageContext?.language == "en" ? "Download our Company Profile" : "Hồ Sơ Năng Lực"}</p>
                     <FaArrowRightLong className="text-2xl" />
-                </button>
-                <button
+                </Link>
+                <Link
                     className="w-full h-auto p-10 bg-red-500 text-white flex flex-col justify-center items-center gap-2
-                    hover:bg-black duration-200 cursor-pointer shadow-lg/50"
+                        hover:bg-black duration-200 cursor-pointer shadow-lg/50"
+                    target="_blank"
+                    href={fetchImageOrFile("gba-profile.pdf")}
                 >
                     <p className="text-2xl text-left font-semibold">{languageContext?.language == "en" ? "See our ISO Certifications" : "Chứng chỉ ISO"}</p>
                     <FaArrowRightLong className="text-2xl" />
-                </button>
+                </Link>
             </div>
         </div>
     )
@@ -632,24 +638,13 @@ const ClientsSection = () => {
 const BulletinSection = () => {
     const languageContext = useLanguage();
 
-    const extractIframeAttributes = (html: string) => {
-        const get = (attr: string) => {
-            const regex = new RegExp(`${attr}="([^"]+)"`);
-            const match = html.match(regex);
-            return match ? match[1] : "";
-        };
-
-        return {
-            src: get("src"),
-            height: get("height"),
-            width: get("width"),
-            title: get("title"),
-        };
-    }
-
-    const htmlSrcs = [
-        `<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7396767047617036288" height="984" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>`,
-    ]
+    const [articles, setArticles] = useState<ArticlesType | null>(null);
+    
+    useEffect(() => {
+        fetchArticles()
+            .then(setArticles)
+            .catch(console.error)
+    }, []);
 
     return (
         <div
@@ -664,39 +659,31 @@ const BulletinSection = () => {
                     </p>
                     <Link
                         className="text-xl border-2 px-5 text-gray-800 border-gray-800 whitespace-nowrap
-                        hover:bg-gray-800 hover:text-white duration-150"
-                        href="/"                    
+                            hover:bg-gray-800 hover:text-white duration-150"
+                        href="/articles"                   
                     >
                         {languageContext?.language == "en" ? "See more" : "Xem thêm"}
                     </Link>
                 </div>
                 <div className="w-full border-2 my-5 border-red-500"></div>
                 <div className="w-full h-full flex flex-row justify-around items-center">
-                    {htmlSrcs.map((src, i) => {
-                        const attributes = extractIframeAttributes(src);
-
-                        return (
-                            <div
-                                key={`article_${i}`}
-                                className="w-full h-full"
-                            >
-                                <iframe
-                                    src={attributes.src}
-                                    width={attributes.width}
-                                    height={attributes.height}
-                                    title={attributes.title}
-                                    className="w-full h-full"
-                                    allowFullScreen
-                                ></iframe>
-                            </div>
-                        );
-                    })}
+                    <div className="w-full h-full">
+                        <iframe
+                            src={articles?.iframes[0].src}
+                            width={articles?.iframes[0].width}
+                            height={articles?.iframes[0].height}
+                            title="LinkedIn Post"
+                            className="w-full h-full"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
                 </div>
             </div>
             <div className="relative w-full h-1/2 mt-10 flex flex-col justify-center items-center gap-5">
                 {/* Newest Project */}
                 <Link
-                    href={"/"}
+                    href={articles?.newestProject.url ?? "/"}
+                    target="_blank"
                     className="relative w-full h-1/2 group"
                 >
                     <div className="absolute z-10 top-5 left-5 flex flex-row justify-start items-center gap-5">
@@ -707,27 +694,28 @@ const BulletinSection = () => {
                     </div>
                     <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                         <Image
-                            src={"/test/diningbg.png"}
-                            width={4992}
-                            height={2995}
+                            src={fetchImageOrFile("Blogs/newest-project.jpg")}
+                            width={1080}
+                            height={1080}
                             className="w-full h-full object-cover brightness-30 shadow-lg/50
                                 group-hover:scale-120 duration-150"
                             alt="Newest Project Background"
                         />
                     </div>
-                    <p className="absolute bottom-3 left-5 z-10 text-2xl">Dining Room</p>
+                    <p className="absolute bottom-3 left-5 z-10 text-2xl">{articles?.newestProject.title}</p>
                 </Link>
                 {/* Compliments */}
                 <Link
-                    href={"/"}
+                    href={articles?.newestAward.url ?? "/"}
+                    target="_blank"
                     className="relative w-full h-1/4 bg-gray-700 shadow-lg/50 hover:bg-black duration-200 cursor-pointer group"
                 >
                     <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                         <Image
-                            src="/test/ais-award.jpg"
-                            width={800}
-                            height={1067}
-                            alt="AIS award"
+                            src={fetchImageOrFile("Blogs/newest-award.jpg")}
+                            width={1080}
+                            height={1080}
+                            alt="Company Award"
                             className="w-full h-full object-cover brightness-30 shadow-lg/50
                                 group-hover:scale-120 duration-150"
                         />
@@ -735,10 +723,10 @@ const BulletinSection = () => {
                     <div className="absolute top-3 left-5 flex flex-row justify-start items-center gap-3">
                         <div className="h-6 border-4 border-red-500"></div>
                         <p className={`text-2xl text-left font-semibold`}>
-                            {languageContext?.language == "en" ? "Awards" : "Khen thưởng"}
+                            {languageContext?.language == "en" ? "Recognition" : "Khen thưởng"}
                         </p>
                     </div>
-                    <p className="absolute bottom-3 left-5 text-2xl">AIS Platinum Sponsor Award</p>
+                    <p className="absolute bottom-3 left-5 text-2xl">{articles?.newestAward.title}</p>
                 </Link>
                 <Link
                     href={"/"}
@@ -746,10 +734,10 @@ const BulletinSection = () => {
                 >
                     <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                         <Image
-                            src="/test/ais-award.jpg"
-                            width={800}
-                            height={1067}
-                            alt="AIS award"
+                            src={fetchImageOrFile("Blogs/newest-event.jpg")}
+                            width={1080}
+                            height={1080}
+                            alt="Company Event"
                             className="w-full h-full object-cover brightness-30 shadow-lg/50
                                 group-hover:scale-120 duration-150"
                         />
@@ -760,7 +748,7 @@ const BulletinSection = () => {
                             {languageContext?.language == "en" ? "Events" : "Sự kiện"}
                         </p>
                     </div>
-                    <p className="absolute bottom-3 left-5 text-2xl">Company Trip 12/2025</p>
+                    <p className="absolute bottom-3 left-5 text-2xl">{articles?.newestEvent.title}</p>
                 </Link>
             </div>
         </div>

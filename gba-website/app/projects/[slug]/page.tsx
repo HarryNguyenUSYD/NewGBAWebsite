@@ -1,25 +1,25 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import ProjectMobile from "./components/ProjectMobile";
 import ProjectDesktop from "./components/ProjectDesktop";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Project | GBA",
+    description: "Established in 2007, Global Brother Associates (GBA) is one of Vietnam's top design company focusing in Architecture, Interior Decoration, Construction, MEP works and Furniture Supply to Turnkey Projects.",
+};
+
 export default function Project() {
-    const [isMobile, setIsMobile] = useState(false);
+    return (
+        <>
+            {/* Desktop */}
+            <div className="hidden lg:block">
+                <ProjectDesktop />
+            </div>
 
-    useEffect(() => {
-        const changeDeviceType = () => {
-            if (window.innerWidth <= 1024) {
-                setIsMobile(true);
-            } else {
-                setIsMobile(false);
-            }
-        }
-
-        changeDeviceType();
-        window.addEventListener("resize", changeDeviceType);
-        return () => window.removeEventListener("resize", changeDeviceType);
-    }, [])
-
-    return (isMobile ? <ProjectMobile /> : <ProjectDesktop />)
+            {/* Mobile / Tablet */}
+            <div className="block lg:hidden">
+                <ProjectMobile />
+            </div>
+        </>
+    )
 }
