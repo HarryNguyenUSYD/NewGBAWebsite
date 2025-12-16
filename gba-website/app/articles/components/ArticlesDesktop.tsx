@@ -7,18 +7,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import type { ArticlesType } from "@/backend/tables";
+import type { ArticlesTableType } from "@/backend/tables";
 import { fetchArticles } from "@/backend/fetchFunctions";
 import { useSearchParams } from "next/navigation";
 import PageSelection from "@/global/PageSelection/PageSelectionDesktop";
-
-const ITEMS_PER_PAGE = 3;
+import { ITEMS_PER_PAGE } from "./consts";
 
 export default function Articles() {
-    
     const searchParams = useSearchParams();
 
-    const [articles, setArticles] = useState<ArticlesType | null>(null);
+    const [articles, setArticles] = useState<ArticlesTableType | null>(null);
     const [page, setPage] = useState(parseInt(searchParams.get("page") ?? "1"));
 
     useEffect(() => {
@@ -41,7 +39,7 @@ export default function Articles() {
                         }}
                     >
                         <ListSection
-                            currentValue={page}
+                            page={page}
                             articles={articles}
                         />
                     </PageSelection>
@@ -64,12 +62,12 @@ const TitleSection = () => {
                 height={2995}
                 className="absolute w-full h-full object-cover brightness-30"
             />
-            <div className="absolute w-auto h-auto bottom-0 right-0 m-20 flex flex-col justify-end items-end gap-10">
+            <div className="absolute w-[60%] h-auto bottom-0 right-0 m-20 flex flex-col justify-end items-end gap-10 text-right">
                 <p className={`text-8xl ${titleFont.className}`}>
                     {languageContext?.language == "en" ? "Articles" : "Bài báo"}
                 </p>
                 <p className="text-4xl">
-                    {languageContext?.language == "en" ? "-- insert slogan here --" : "-- insert slogan here --"}
+                    {languageContext?.language == "en" ? "The latest news about everything GBA." : "Tin tức mới nhất về mọi hoạt động của GBA."}
                 </p>
             </div>
         </div>
@@ -91,10 +89,10 @@ const Post = ({ iframe } : { iframe: { src: string, width: number, height: numbe
     );
 }
 
-const ListSection = ({ articles, currentValue } : { articles: ArticlesType | null, currentValue: number }) => {
+const ListSection = ({ articles, page } : { articles: ArticlesTableType | null, page: number }) => {
     return (
         <div className="w-full h-auto mb-10 px-20 bg-white flex flex-col justify-start items-center gap-10">
-            {articles?.iframes.slice((currentValue - 1) * ITEMS_PER_PAGE, (currentValue - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE).map((iframe, i) => (<Post iframe={iframe} key={`article_${i}`} />))}
+            {articles?.iframes.slice((page - 1) * ITEMS_PER_PAGE, (page - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE).map((iframe, i) => (<Post iframe={iframe} key={`article_${i}`} />))}
         </div> 
     )
 }

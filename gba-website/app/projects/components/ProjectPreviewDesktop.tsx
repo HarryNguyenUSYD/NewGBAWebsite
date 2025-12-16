@@ -1,54 +1,105 @@
-import { ProjectType } from "@/backend/tables"
+import { fetchProjectImage } from "@/backend/fetchFunctions"
+import { ProjectTableType } from "@/backend/tables"
 import { projectFont } from "@/global/fonts/fonts"
 import { useLanguage } from "@/global/LanguageContext/LanguageContext"
 import { motion } from "framer-motion"
 import Image from "next/image"
 
-export const ProjectPreview = ({ project, isEven }: { project: ProjectType | null, isEven: boolean }) => {
+export const ProjectPreview = ({ project, isEven }: { project: ProjectTableType | null, isEven: boolean }) => {
     const languageContext = useLanguage();
+
+    const typesOption: { value: string, label: string }[] = [
+        {
+            value: "apartment",
+            label: languageContext?.language == "en" ? "Apartment" : "Căn hộ",
+        },
+        {
+            value: "bank",
+            label: languageContext?.language == "en" ? "Bank" : "Ngân hàng",
+        },
+        {
+            value: "consulate",
+            label: languageContext?.language == "en" ? "Consulate" : "Lãnh sự quán",
+        },
+        {
+            value: "education",
+            label: languageContext?.language == "en" ? "Education" : "Giáo dục",
+        },
+        {
+            value: "foodbeverage",
+            label: languageContext?.language == "en" ? "Food & Beverage" : "Đồ ăn & thức uống",
+        },
+        {
+            value: "hotelresort",
+            label: languageContext?.language == "en" ? "Hotel & Resort" : "Khách sạn & Resort",
+        },
+        {
+            value: "office",
+            label: languageContext?.language == "en" ? "Office" : "Văn phòng",
+        },
+        {
+            value: "shop",
+            label: languageContext?.language == "en" ? "Shop" : "Cửa hàng",
+        },
+        {
+            value: "showroom",
+            label: languageContext?.language == "en" ? "Showroom" : "Phòng trưng bày",
+        },
+        {
+            value: "others",
+            label: languageContext?.language == "en" ? "Others" : "Khác",
+        },
+    ];
 
     return (
         <motion.a
             href={"/projects/project"}
-            className="relative w-[70vw] h-[60vh] group mt-25 flex flex-row justify-between items-center"
+            className={`relative w-[70vw] h-[60vh] group mt-25 flex flex-row
+                justify-between items-center`}
             animate="initial"
             whileHover="hover"
         >
             {!isEven && (
-                <motion.div
-                    className={`relative w-[25vw] h-[80%] p-5 overflow-hidden
-                        bg-gray-700 text-white flex flex-col justify-center items-start z-20 ${projectFont.className}`}
-                >
-                    <p className={`text-2xl mb-3 font-bold`}>
-                        Project Title Number 1
-                    </p>
-                    <p className="text-lg">
-                        <span className="font-bold">{languageContext?.language == "en" ? "Type: " : "Loại dự án: "}</span>
-                        <span>Education</span>
-                    </p>
-                    <p className="text-lg">
-                        <span className="font-bold">{languageContext?.language == "en" ? "Address: " : "Địa chỉ: "}</span>
-                        <span>Project Title Number 1</span>
-                    </p>
-                    <p className="text-lg">
-                        <span className="font-bold">{languageContext?.language == "en" ? "Completion Date: " : "Ngày hoàn thành: "}</span>
-                        <span>01/01/2000</span>
-                    </p>
-                    <motion.div
-                        className="absolute inset-0 bg-black -z-10"
-                        variants={{
-                            initial: { x: "-100%" },   // start off-screen
-                            hover: { x: "0%" }      // slide fully in
-                        }}
-                        transition={{ duration: 0.2 }}
-                    ></motion.div>
-                </motion.div>
+                <>
+                    <div className="absolute w-full h-full flex justify-center items-center">
+                        <div className="relative w-full h-[80%] bg-gray-700 overflow-hidden">
+                            <motion.div
+                                className="absolute inset-0 bg-black"
+                                variants={{
+                                    initial: { x: "-100%" },   // start off-screen
+                                    hover: { x: "0%" }      // slide fully in
+                                }}
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                            ></motion.div>
+                        </div>
+                    </div>
+                    <div
+                        className={`relative w-[25vw] h-[80%] p-10 overflow-hidden
+                            text-white flex flex-col justify-center items-start z-20 ${projectFont.className}`}
+                    >
+                        <p className={`text-2xl mb-3 font-bold`}>
+                            {project?.name}
+                        </p>
+                        <p className="text-lg">
+                            <span className="font-bold">{languageContext?.language == "en" ? "Type: " : "Loại dự án: "}</span>
+                            <span>{project?.projectType}</span>
+                        </p>
+                        <p className="text-lg">
+                            <span className="font-bold">{languageContext?.language == "en" ? "Address: " : "Địa chỉ: "}</span>
+                            <span>{project?.siteAddress}</span>
+                        </p>
+                        <p className="text-lg">
+                            <span className="font-bold">{languageContext?.language == "en" ? "Completion Date: " : "Ngày hoàn thành: "}</span>
+                            <span>{project?.endDate}</span>
+                        </p>
+                    </div>
+                </>
             )}
             <div className="relative w-[40vw] h-full">
                 <motion.div className="absolute w-full h-full border-4 p-3 border-black bg-white
                     group-hover:border-red-500 duration-150 z-3">
                     <Image
-                        src="/test/diningbg.png"
+                        src={fetchProjectImage(`${project?.folderName}${project?.coverImage}`)}
                         width={4492}
                         height={2995}
                         alt="Project Cover Image"
@@ -114,34 +165,40 @@ export const ProjectPreview = ({ project, isEven }: { project: ProjectType | nul
                 </motion.div>
             </div>
             {isEven && (
-                <motion.div
-                    className={`relative w-[25vw] h-[80%] p-5 overflow-hidden
-                        bg-red-500 text-white flex flex-col justify-center items-start z-20 ${projectFont.className}`}
-                >
-                    <p className={`text-2xl mb-3 font-bold`}>
-                        Project Title Number 1
-                    </p>
-                    <p className="text-lg">
-                        <span className="font-bold">{languageContext?.language == "en" ? "Type: " : "Loại dự án: "}</span>
-                        <span>Education</span>
-                    </p>
-                    <p className="text-lg">
-                        <span className="font-bold">{languageContext?.language == "en" ? "Address: " : "Tên dự án: "}</span>
-                        <span>Project Title Number 1</span>
-                    </p>
-                    <p className="text-lg">
-                        <span className="font-bold">{languageContext?.language == "en" ? "Completion Date: " : "Ngày hoàn thành: "}</span>
-                        <span>01/01/2000</span>
-                    </p>
-                    <motion.div
-                        className="absolute inset-0 bg-black -z-10"
-                        variants={{
-                            initial: { x: "100%" },   // start off-screen
-                            hover: { x: "0%" }      // slide fully in
-                        }}
-                        transition={{ duration: 0.2 }}
-                    ></motion.div>
-                </motion.div>
+                <>
+                    <div className="absolute w-full h-full flex justify-center items-center">
+                        <div className="relative w-full h-[80%] bg-gray-700 overflow-hidden">
+                            <motion.div
+                                className="absolute inset-0 bg-black"
+                                variants={{
+                                    initial: { x: "100%" },   // start off-screen
+                                    hover: { x: "0%" }      // slide fully in
+                                }}
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                            ></motion.div>
+                        </div>
+                    </div>
+                    <div
+                        className={`relative w-[25vw] h-[80%] p-10 overflow-hidden
+                            text-white flex flex-col justify-center items-start z-20 ${projectFont.className}`}
+                    >
+                        <p className={`text-2xl mb-3 font-bold`}>
+                            {project?.name}
+                        </p>
+                        <p className="text-lg">
+                            <span className="font-bold">{languageContext?.language == "en" ? "Type: " : "Loại dự án: "}</span>
+                            <span>{typesOption.find((p) => project?.projectType === p.value)?.label}</span>
+                        </p>
+                        <p className="text-lg">
+                            <span className="font-bold">{languageContext?.language == "en" ? "Address: " : "Địa chỉ: "}</span>
+                            <span>{project?.siteAddress}</span>
+                        </p>
+                        <p className="text-lg">
+                            <span className="font-bold">{languageContext?.language == "en" ? "Completion Date: " : "Ngày hoàn thành: "}</span>
+                            <span>{project?.endDate}</span>
+                        </p>
+                    </div>
+                </>
             )}
         </motion.a>
     )

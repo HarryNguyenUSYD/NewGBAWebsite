@@ -1,4 +1,4 @@
-import { ArticlesType } from "./tables";
+import { ArticlesTableType, ProjectsTableType } from "./tables";
 
 async function fetchJson<T>(
     url: string,
@@ -25,5 +25,15 @@ export function fetchImageOrFile(url: string) {
 }
 
 export async function fetchArticles() {
-    return fetchJson<ArticlesType>("Blogs/blogsList.json");
+    return fetchJson<ArticlesTableType>("Blogs/blogsList.json");
+}
+
+export async function fetchProjects() {
+    return fetchJson<ProjectsTableType>("projectList.json")
+}
+
+export function fetchProjectImage(url: string) {
+    const base = process.env.NEXT_PUBLIC_CLOUDFRONT_BASE!;
+
+    return `${base}/Projects/${url}`;
 }

@@ -15,7 +15,7 @@ import { useNavigationBar } from "@/global/NavigationBar/NavigationBarContext";
 import Link from "next/link";
 import { experienceFont, navFont, titleFont, zilliaxFont } from "@/global/fonts/fonts";
 import { fetchArticles, fetchImageOrFile } from "@/backend/fetchFunctions";
-import type { ArticlesType } from "@/backend/tables";
+import type { ArticlesTableType } from "@/backend/tables";
 
 
 export default function Home() {
@@ -685,7 +685,7 @@ const ClientsSection = () => {
 const BulletinSection = () => {
     const languageContext = useLanguage();
 
-    const [articles, setArticles] = useState<ArticlesType | null>(null);
+    const [articles, setArticles] = useState<ArticlesTableType | null>(null);
 
     useEffect(() => {
         fetchArticles()

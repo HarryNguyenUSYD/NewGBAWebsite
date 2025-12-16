@@ -1,21 +1,44 @@
 "use client";
 
-import { navFont, titleFont } from "@/global/fonts/fonts";
+import { titleFont } from "@/global/fonts/fonts";
 import { useLanguage } from "@/global/LanguageContext/LanguageContext";
 import SiteWrapper from "@/global/SiteWrapper/SiteWrapperMobile";
 import Image from "next/image";
-import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardArrowRight, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
-import { IconType } from "react-icons";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import PageSelection from "@/global/PageSelection/PageSelectionMobile";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { ArticlesTableType } from "@/backend/tables";
+import { fetchArticles } from "@/backend/fetchFunctions";
+import { ITEMS_PER_PAGE } from "./consts";
 
 export default function Articles() {
+    const searchParams = useSearchParams();
+
+    const [articles, setArticles] = useState<ArticlesTableType | null>(null);
+    const [page, setPage] = useState(parseInt(searchParams.get("page") ?? "1"));
+
+    useEffect(() => {
+        fetchArticles()
+            .then(setArticles)
+            .catch(console.error)
+    }, []);
+
     return (
         <SiteWrapper topMargin={true}>
             <TitleSection />
-            <PageSection currentValue={1} maxValue={10} />
-            <ListSection />
-            <PageSection currentValue={1} maxValue={10} />
+            <PageSelection
+                props={{
+                    page: page,
+                    setPage: setPage,
+                    maxPage: Math.ceil((articles?.iframes.length ?? 1) / ITEMS_PER_PAGE),
+                    title: "articles"
+                }}
+            >
+                <ListSection
+                    page={page}
+                    articles={articles}
+                />
+            </PageSelection>
         </SiteWrapper>
     );
 }
@@ -32,98 +55,26 @@ const TitleSection = () => {
                 height={2995}
                 className="absolute w-full h-full object-cover brightness-30"
             />
-            <div className="absolute w-auto h-auto bottom-0 right-0 m-5 flex flex-col justify-end items-end gap-5">
+            <div className="absolute w-[60%] h-auto bottom-0 right-0 m-5 flex flex-col justify-end items-end gap-5 text-right">
                 <p className={`text-4xl ${titleFont.className}`}>
                     {languageContext?.language == "en" ? "Articles" : "Bài báo"}
                 </p>
-                <p className="text-2xl">
-                    {languageContext?.language == "en" ? "-- insert slogan here --" : "-- insert slogan here --"}
+                <p className="text-2xl ">
+                    {languageContext?.language == "en" ? "The latest news about everything GBA." : "Tin tức mới nhất về mọi hoạt động của GBA."}
                 </p>
             </div>
         </div>
     )
 }
 
-const PageButton = ({ isCurrent, value } : { isCurrent?: boolean, value: number }) => {
+const Post = ({ iframe } : { iframe: { src: string, width: number, height: number } }) => {
     return (
-        <Link
-            href={"/"}
-            className={`size-8 rounded-full text-lg flex justify-center items-center
-                ${(isCurrent) ? "bg-red-500 text-white": "bg-gray-200 text-black hover:bg-red-500 hover:text-white"}
-                duration-100 ${navFont.className}`}
-        >
-            {value}
-        </Link>
-    )
-}
-
-const MoveButton = ({ Icon, direction } : { Icon: IconType, direction: number }) => {
-    return (
-        <motion.a
-            href="/"
-            whileHover={"hover"}
-            className="relative size-6 rounded-full overflow-hidden
-                bg-gray-200 text-black hover:bg-red-500 hover:text-white duration-100"
-        >
-            <motion.div
-                className="absolute w-full h-full flex justify-center items-center"
-                animate={{ x: 0 }}
-                variants={{
-                    hover: {
-                        x: ["0", direction < 0 ? "-0.5rem" : "0.5rem", "0"],
-                        transition: { duration: 0.5, ease: "easeInOut", repeat: Infinity }
-                    }
-                }}
-            >
-                <Icon className="text-lg" />
-            </motion.div>
-        </motion.a>
-    )
-}
-
-const PageSection = ({ currentValue, maxValue }: { currentValue: number, maxValue: number }) => {
-    return (
-        <div className="w-full h-auto my-10 bg-white flex flex-row justify-center items-center gap-4">
-            <MoveButton Icon={MdOutlineKeyboardDoubleArrowLeft} direction={-2} />
-            <MoveButton Icon={MdOutlineKeyboardArrowLeft} direction={-1} />
-            {currentValue - 3 >= 1 && <div className="text-2xl text-black">...</div>}
-            {currentValue - 2 >= 1 && <PageButton value={currentValue - 2} />}
-            {currentValue - 1 >= 1 && <PageButton value={currentValue - 1} />}
-            <PageButton isCurrent value={currentValue} />
-            {currentValue + 1 <= maxValue && <PageButton value={currentValue + 1} />}
-            {currentValue + 2 <= maxValue && <PageButton value={currentValue + 2} />}
-            {currentValue + 3 <= maxValue && <div className="text-2xl text-black">...</div>}
-            <MoveButton Icon={MdOutlineKeyboardArrowRight} direction={1} />
-            <MoveButton Icon={MdOutlineKeyboardDoubleArrowRight} direction={2} />
-        </div>
-    )
-}
-
-const Post = ({ src } : { src: string }) => {
-    const extractIframeAttributes = (html: string) => {
-        const get = (attr: string) => {
-            const regex = new RegExp(`${attr}="([^"]+)"`);
-            const match = html.match(regex);
-            return match ? match[1] : "";
-        };
-
-        return {
-            src: get("src"),
-            height: get("height"),
-            width: get("width"),
-            title: get("title"),
-        };
-    }
-
-    const attributes = extractIframeAttributes(src);
-
-    return (
-        <div className="w-full h-[155vh]">
+        <div className="w-full h-screen">
             <iframe
-                src={attributes.src}
-                width={attributes.width}
-                height={attributes.height}
-                title={attributes.title}
+                src={iframe.src}
+                width={iframe.width}
+                height={iframe.height}
+                title="LinkedIn Post"
                 className="w-full h-full"
                 allowFullScreen
             ></iframe>
@@ -131,18 +82,10 @@ const Post = ({ src } : { src: string }) => {
     );
 }
 
-const ListSection = () => {
-    const htmlSrcs = [
-        `<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7396767047617036288" height="984" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>`,
-        `<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7396767047617036288" height="984" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>`,
-        `<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7396767047617036288" height="984" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>`,
-        `<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7396767047617036288" height="984" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>`,
-        `<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7396767047617036288" height="984" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>`,
-    ]
-
+const ListSection = ({ articles, page } : { articles: ArticlesTableType | null, page: number }) => {
     return (
         <div className="w-full h-auto mb-5 px-5 bg-white flex flex-col justify-start items-center gap-10">
-            {htmlSrcs.map((src, i) => (<Post src={src} key={`article_${i}`} />))}
-        </div>
+            {articles?.iframes.slice((page - 1) * ITEMS_PER_PAGE, (page - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE).map((iframe, i) => (<Post iframe={iframe} key={`article_${i}`} />))}
+        </div> 
     )
 }

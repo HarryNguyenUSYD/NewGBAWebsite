@@ -1,26 +1,114 @@
 "use client";
 
-import { navFont, titleFont } from "@/global/fonts/fonts";
+import { titleFont } from "@/global/fonts/fonts";
 import { useLanguage } from "@/global/LanguageContext/LanguageContext";
 import SiteWrapper from "@/global/SiteWrapper/SiteWrapperDesktop";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ImCheckboxUnchecked, ImCheckboxChecked } from "react-icons/im";
-import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardArrowRight, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { FaCaretDown, FaCheck } from "react-icons/fa";
-import { IconType } from "react-icons";
 import { ProjectPreview } from "./ProjectPreviewDesktop";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import PageSelection from "@/global/PageSelection/PageSelectionDesktop";
+import { ProjectsTableType, ProjectTableType } from "@/backend/tables";
+import { useSearchParams } from "next/navigation";
+import { fetchProjects } from "@/backend/fetchFunctions";
+import { ITEMS_PER_PAGE, ProjectSearchProps } from "./consts";
+import { useRouter } from "next/navigation";
 
 export default function Projects() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const [projects, setProjects] = useState<ProjectsTableType | null>(null);
+    const [page, setPage] = useState(parseInt(searchParams.get("page") ?? "1"));
+    const [name, setName] = useState(searchParams.get("name") ?? "");
+    const [order, setOrder] = useState(searchParams.get("order") ?? "newest");
+    const [excludeTypes, setExcludeTypes] = useState<string[]>(searchParams.getAll("exclude"));
+    const [finalProjects, setFinalProjects] = useState<ProjectTableType[]>([]);
+
+    const handleSubmit = () => {
+        const sp = new URLSearchParams(searchParams.toString());
+        sp.delete("name");
+        sp.delete("order");
+        sp.delete("exclude");
+
+        sp.set("name", name);
+        sp.set("order", order);
+
+        excludeTypes.forEach((t) => sp.append("exclude", t));
+
+        router.push(`/projects?${sp.toString()}`);
+
+        setFinalProjects(projects?.projects.filter((p) => {
+            if (name != "" && !p.name.toLowerCase().includes(name.toLowerCase())) { return false; }
+            if (excludeTypes.includes(p.projectType)) { return false; }
+
+            return true;
+        }).sort((p1, p2) => {
+            switch (order) {
+                case "az":
+                    return p1.name.localeCompare(p2.name);
+                case "za":
+                    return p2.name.localeCompare(p1.name);
+                case "oldest":
+                    return sortByDate(p1, p2, true) ? 1 : -1;
+                case "newest":
+                default:
+                    return sortByDate(p1, p2, false) ? 1 : -1;
+            }
+        }) ?? []);
+    }
+
+    const sortByDate = (p1: ProjectTableType, p2: ProjectTableType, reverse: boolean) => {
+        if (p1.endDate == "-" && p2.endDate != "-") {
+            return true;
+        } else if (p1.endDate != "-" && p2.endDate == "-") {
+            return false;
+        } else if (p1.endDate == "-" && p2.endDate == "-") {
+            return true;
+        }
+
+        return reverse ? (parseEndDate(p1.endDate) >= parseEndDate(p2.endDate)) : (parseEndDate(p1.endDate) < parseEndDate(p2.endDate))
+    }
+
+    const parseEndDate = (endDate: string) => {
+        const [monthStr, yearStr] = endDate.split("-");
+        const year = 2000 + Number(yearStr); // assumes 2000–2099
+        const month = new Date(`${monthStr} 1`).getMonth(); // 0-based
+        return new Date(year, month, 1);
+    }
+
+    useEffect(() => {
+        fetchProjects()
+            .then(setProjects)
+            .catch(console.error)
+    }, []);
+
+    useEffect(() => {
+        handleSubmit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [projects]);
+
     return (
         <SiteWrapper topMargin={true}>
             <TitleSection />
-            <SearchSection />
-            <PageSection currentValue={1} maxValue={10} />
-            <ListSection />
-            <PageSection currentValue={1} maxValue={10} />
+            <SearchSection props={{
+                name,
+                setName,
+                order,
+                setOrder,
+                excludeTypes,
+                setExcludeTypes,
+                handleSubmit
+            }} />
+            <PageSelection props={{
+                page,
+                setPage,
+                maxPage: Math.ceil((finalProjects.length ?? 1) / ITEMS_PER_PAGE),
+                title: "projects"
+            }}>
+                <ListSection projects={finalProjects} page={page} />
+            </PageSelection>
         </SiteWrapper>
     );
 }
@@ -37,30 +125,28 @@ const TitleSection = () => {
                 height={2995}
                 className="absolute w-full h-full object-cover brightness-30"
             />
-            <div className="absolute w-auto h-auto bottom-0 right-0 m-20 flex flex-col justify-end items-end gap-10">
+            <div className="absolute w-[60%] h-auto bottom-0 right-0 m-20 flex flex-col justify-end items-end gap-10 text-right">
                 <p className={`text-8xl ${titleFont.className}`}>
                     {languageContext?.language == "en" ? "Projects" : "Dự án"}
                 </p>
                 <p className="text-4xl">
-                    {languageContext?.language == "en" ? "-- insert slogan here --" : "-- insert slogan here --"}
+                    {languageContext?.language == "en" ? "Built on experience, proven through every project." : "Xây dựng từ kinh nghiệm, khẳng định qua từng dự án."}
                 </p>
             </div>
         </div>
     )
 }
 
-const SearchSection = () => {
+const SearchSection = ({ props } : { props: ProjectSearchProps }) => {
     const languageContext = useLanguage();
     const [isSelectingType, setIsSelectingType] = useState(false);
     const [isSelectingOrder, setIsSelectingOrder] = useState(false);
-    const [selected, setSelected] = useState<string[]>([]);
-    const [order, setOrder] = useState<string>("newest");
 
     const onChange = (name: string) => {
-        if (selected.includes(name)) {
-            setSelected((prev) => (prev.filter((ele) => (ele != name))));
+        if (props.excludeTypes.includes(name)) {
+            props.setExcludeTypes((prev) => (prev.filter((ele) => (ele != name))));
         } else {
-            setSelected((prev) => [...prev, name]);
+            props.setExcludeTypes((prev) => [...prev, name]);
         }
     }
 
@@ -134,9 +220,17 @@ const SearchSection = () => {
             >
                 <input
                     type="text"
+                    value={props.name}
                     placeholder={languageContext?.language == "en" ? "Search by name" : "Tìm theo tên"}
                     className="w-[50vw] h-10 outline-none border-2 border-black text-black placeholder:text-gray-300
                         p-5 rounded-full text-2xl"
+                    onChange={(e) => (props.setName(e.currentTarget.value))}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            props.handleSubmit();
+                        }
+                    }}
                 />
                 <div className="flex flex-row justify-center items-center gap-5">
                     {/* Select Project Types */}
@@ -160,7 +254,7 @@ const SearchSection = () => {
                                     <button
                                         type="button"
                                         className={`w-full px-3 cursor-pointer hover:bg-gray-200 text-black duration-100`}
-                                        onClick={() => setSelected(typesOption.map((opt) => opt.value))}
+                                        onClick={() => props.setExcludeTypes([])}
                                     >
                                         <span className="text-2xl whitespace-nowrap select-none">
                                             {languageContext?.language == "en" ? "Select All" : "Chọn tất cả"}
@@ -169,7 +263,7 @@ const SearchSection = () => {
                                     <button
                                         type="button"
                                         className={`w-full px-3 cursor-pointer hover:bg-gray-200 text-black duration-100`}
-                                        onClick={() => setSelected([])}
+                                        onClick={() => props.setExcludeTypes(typesOption.map((opt) => opt.value))}
                                     >
                                         <span className="text-2xl whitespace-nowrap select-none">
                                             {languageContext?.language == "en" ? "Deselect All" : "Huỷ chọn tất cả"}
@@ -187,12 +281,12 @@ const SearchSection = () => {
                                                 name={opt.value}
                                                 id={opt.value}
                                                 className="sr-only"
-                                                checked={selected.includes(opt.value)}
+                                                checked={!props.excludeTypes.includes(opt.value)}
                                                 onChange={() => onChange(opt.value)}
                                             />
                                             <div className="size-5">
-                                                {selected.includes(opt.value) && <ImCheckboxChecked className="w-full h-full"/>}
-                                                {!selected.includes(opt.value) && <ImCheckboxUnchecked className="w-full h-full"/>}
+                                                {!props.excludeTypes.includes(opt.value) && <ImCheckboxChecked className="w-full h-full"/>}
+                                                {props.excludeTypes.includes(opt.value) && <ImCheckboxUnchecked className="w-full h-full"/>}
                                             </div>
                                             <span className="text-2xl whitespace-nowrap select-none">{opt.label}</span>
                                         </label>
@@ -224,7 +318,7 @@ const SearchSection = () => {
                                     <input
                                         type="hidden"
                                         name="order"
-                                        value={order}
+                                        value={props.order}
                                     />
                                     {orderOption.map((opt) => (
                                         <button
@@ -232,11 +326,11 @@ const SearchSection = () => {
                                             key={opt.value}
                                             className={`w-full px-3 cursor-pointer hover:bg-gray-200 text-black duration-100
                                                 flex flex-row justify-between items-center`}
-                                            onClick={() => setOrder(opt.value)}
+                                            onClick={() => props.setOrder(opt.value)}
                                         >
                                             <FaCheck
                                                 className={`text-xl`}
-                                                style={{ opacity: (order == opt.value) ? 100 : 0 }}
+                                                style={{ opacity: (props.order == opt.value) ? 100 : 0 }}
                                             />
                                             <span className="text-2xl whitespace-nowrap select-none">
                                                 {opt.label}
@@ -253,6 +347,10 @@ const SearchSection = () => {
                         value="Submit"
                         className={`w-auto h-auto px-5 py-1 rounded-full flex flex-row justify-center items-center gap-3 cursor-pointer
                             bg-gray-700 text-white hover:bg-red-500 duration-100 text-3xl`}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            props.handleSubmit();
+                        }}
                     />
                 </div>
             </form>
@@ -260,66 +358,11 @@ const SearchSection = () => {
     )
 }
 
-const PageButton = ({ isCurrent, value } : { isCurrent?: boolean, value: number }) => {
-    return (
-        <Link
-            href={"/"}
-            className={`size-12 rounded-full text-2xl flex justify-center items-center
-                ${(isCurrent) ? "bg-red-500 text-white": "bg-gray-200 text-black hover:bg-red-500 hover:text-white"}
-                duration-100 ${navFont.className}`}
-        >
-            {value}
-        </Link>
-    )
-}
-
-const MoveButton = ({ Icon, direction } : { Icon: IconType, direction: number }) => {
-    return (
-        <motion.a
-            href="/"
-            whileHover={"hover"}
-            className="relative size-10 rounded-full overflow-hidden
-                bg-gray-200 text-black hover:bg-red-500 hover:text-white duration-100"
-        >
-            <motion.div
-                className="absolute w-full h-full flex justify-center items-center"
-                animate={{ x: 0 }}
-                variants={{
-                    hover: {
-                        x: ["0", direction < 0 ? "-0.5rem" : "0.5rem", "0"],
-                        transition: { duration: 0.5, ease: "easeInOut", repeat: Infinity }
-                    }
-                }}
-            >
-                <Icon className="text-2xl" />
-            </motion.div>
-        </motion.a>
-    )
-}
-
-const PageSection = ({ currentValue, maxValue }: { currentValue: number, maxValue: number }) => {
-    return (
-        <div className="w-full h-auto mb-10 bg-white flex flex-row justify-center items-center gap-5">
-            <MoveButton Icon={MdOutlineKeyboardDoubleArrowLeft} direction={-2} />
-            <MoveButton Icon={MdOutlineKeyboardArrowLeft} direction={-1} />
-            {currentValue - 3 >= 1 && <div className="text-2xl text-black">...</div>}
-            {currentValue - 2 >= 1 && <PageButton value={currentValue - 2} />}
-            {currentValue - 1 >= 1 && <PageButton value={currentValue - 1} />}
-            <PageButton isCurrent value={currentValue} />
-            {currentValue + 1 <= maxValue && <PageButton value={currentValue + 1} />}
-            {currentValue + 2 <= maxValue && <PageButton value={currentValue + 2} />}
-            {currentValue + 3 <= maxValue && <div className="text-2xl text-black">...</div>}
-            <MoveButton Icon={MdOutlineKeyboardArrowRight} direction={1} />
-            <MoveButton Icon={MdOutlineKeyboardDoubleArrowRight} direction={2} />
-        </div>
-    )
-}
-
-const ListSection = () => {
+const ListSection = ({ projects, page }: { projects: ProjectTableType[] | undefined, page: number }) => {
     return (
         <div className="w-full h-auto mb-10 bg-white flex flex-col justify-start items-center gap-10">
-            {Array.from({ length: 9 }, (_, i) => i + 1).map((_, i) => (
-                <ProjectPreview key={i} project={null} isEven={i % 2 == 0} />
+            {projects?.slice((page - 1) * ITEMS_PER_PAGE, (page - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE).map((p, i) => (
+                <ProjectPreview key={i} project={p} isEven={i % 2 == 0} />
             ))}
         </div>
     )

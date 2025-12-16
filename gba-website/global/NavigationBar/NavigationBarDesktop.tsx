@@ -119,16 +119,16 @@ const NavLink = ({ href, children }: {
     href: string,
     children: React.ReactNode
 }) => (
-    <motion.div
+    <motion.a
+        href={href}
         whileHover={"hover"}
         className="relative w-auto h-full px-8 overflow-hidden flex justify-center items-center"
         animate="initial"
     >
-        <Link
-            href={href}
+        <div
             className={`w-full h-full flex flex-row justify-center items-center text-xl ${navFont.className}`}>
             {children}
-        </Link>
+        </div>
         <motion.div
             className="absolute inset-0 bg-red-500 -z-10"
             variants={{
@@ -138,7 +138,7 @@ const NavLink = ({ href, children }: {
             transition={{ duration: 0.2 }}
         >
         </motion.div>
-    </motion.div>
+    </motion.a>
 )
 
 const MiniNavLink = ({ id, children, active }: {

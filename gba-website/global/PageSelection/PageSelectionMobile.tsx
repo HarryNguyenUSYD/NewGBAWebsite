@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { IconType } from "react-icons";
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight, MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
@@ -23,9 +22,8 @@ const PageButton = ({
 
     return (
         <Link
-            className={`size-12 rounded-full text-2xl flex justify-center items-center
-                ${(isCurrent) ? "bg-red-500 text-white": "bg-gray-200 text-black hover:bg-red-500 hover:text-white"}
-                duration-100 ${navFont.className}`}
+            className={`size-8 rounded-full text-lg flex justify-center items-center
+                ${(isCurrent) ? "bg-red-500 text-white": "bg-gray-200 text-black"} ${navFont.className}`}
             href={href}
             onClick={(e) => {
                 e.preventDefault();
@@ -54,11 +52,10 @@ const MoveButton = ({
     })();
 
     return (
-        <motion.a
+        <Link
             href={href}
-            whileHover={"hover"}
-            className={`relative size-10 rounded-full overflow-hidden
-                bg-gray-200 text-black hover:bg-red-500 hover:text-white"} duration-100`}
+            className="relative size-6 rounded-full flex justify-center items-center
+                bg-gray-200 text-black"
             onClick={(e) => {
                 e.preventDefault();
                 props.setPage(props.page + direction);
@@ -66,19 +63,8 @@ const MoveButton = ({
             }}
             aria-current="page"
         >
-            <motion.div
-                className="absolute w-full h-full flex justify-center items-center"
-                animate={{ x: 0 }}
-                variants={{
-                    hover: {
-                        x: ["0", direction < 0 ? "-0.5rem" : "0.5rem", "0"],
-                        transition: { duration: 0.5, ease: "easeInOut", repeat: Infinity }
-                    }
-                }}
-            >
-                <Icon className="text-2xl" />
-            </motion.div>
-        </motion.a>
+            <Icon className="text-lg" />
+        </Link>
     )
 }
 
@@ -86,7 +72,7 @@ const PageSelectionBar = ({
     props
 }: { props: PageSelectionProps }) => {
     return (
-        <div className="w-full h-auto my-10 bg-white flex flex-row justify-center items-center gap-5">
+        <div className="w-full h-auto my-10 bg-white flex flex-row justify-center items-center gap-4">
             {props.page > 1 && <MoveButton
                 props={props}
                 Icon={MdOutlineKeyboardDoubleArrowLeft}
