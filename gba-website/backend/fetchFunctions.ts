@@ -1,4 +1,4 @@
-import { ArticlesTableType, ProjectsTableType } from "./tables";
+import { ArticlesTableType, CareersTableType, ClientsTableType, ProjectsTableType, VendorsTableType } from "./tables";
 
 async function fetchJson<T>(
     url: string,
@@ -6,10 +6,7 @@ async function fetchJson<T>(
 ): Promise<T> {
     const base = process.env.NEXT_PUBLIC_CLOUDFRONT_BASE!;
 
-    const res = await fetch(`${base}/${url}`, {
-        next: { revalidate: 300 },
-        ...options,
-    });
+    const res = await fetch(`${base}/${url}`, { cache: "force-cache", ...options });
 
     if (!res.ok) {
         throw new Error(`Failed to fetch ${url}: ${res.status}`);
@@ -36,4 +33,16 @@ export function fetchProjectImage(url: string) {
     const base = process.env.NEXT_PUBLIC_CLOUDFRONT_BASE!;
 
     return `${base}/Projects/${url}`;
+}
+
+export async function fetchCareers() {
+    return fetchJson<CareersTableType>("careerList.json")
+}
+
+export async function fetchClients() {
+    return fetchJson<ClientsTableType>("clientList.json")
+}
+
+export async function fetchVendors() {
+    return fetchJson<VendorsTableType>("vendorList.json")
 }

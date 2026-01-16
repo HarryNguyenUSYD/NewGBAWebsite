@@ -1,4 +1,9 @@
-import { Montserrat, Markazi_Text, Momo_Trust_Display, Bevan, Charm, Goldman } from "next/font/google";
+import { Montserrat, Markazi_Text, Momo_Trust_Display, Bevan, Charm, Goldman, Lobster } from "next/font/google";
+
+export const sloganFont = Lobster({
+    weight: ["400"],
+    subsets: ["latin", "vietnamese"]
+});
 
 export const experienceFont = Charm({
     weight: ["700"],

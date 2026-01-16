@@ -5,7 +5,7 @@ import SiteWrapper from "@/global/SiteWrapper/SiteWrapperDesktop";
 import Image from "next/image";
 import { useLanguage } from "@/global/LanguageContext/LanguageContext";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { FaFacebook, FaLinkedin, FaMapMarkedAlt } from "react-icons/fa";
+import { FaFacebook, FaLinkedin, FaMapMarkedAlt, FaArrowDown } from "react-icons/fa";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { PiMapPin } from "react-icons/pi";
 import { FiPhone } from "react-icons/fi";
@@ -13,7 +13,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useNavigationBar } from "@/global/NavigationBar/NavigationBarContext";
 import Link from "next/link";
-import { experienceFont, navFont, titleFont, zilliaxFont } from "@/global/fonts/fonts";
+import { experienceFont, navFont, sloganFont, titleFont, zilliaxFont } from "@/global/fonts/fonts";
 import { fetchArticles, fetchImageOrFile } from "@/backend/fetchFunctions";
 import type { ArticlesTableType } from "@/backend/tables";
 
@@ -40,55 +40,71 @@ const BannerSection = () => {
         <>
             <BannerBackground index={index} />
             <BannerForeground index={index} setIndex={setIndex} />
+            <BannerScroll />
         </>
+    )
+}
+
+const BannerScroll = () => {
+    const languageContext = useLanguage();
+
+    return (
+        <div className="absolute bottom-0 mb-10 w-full h-auto flex justify-center items-center">
+            <AnimatePresence mode="wait">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ translateY: ["0", "2vh", "0"], opacity: 0.75 }}
+                    transition={{
+                        translateY: { repeat: Infinity, repeatType: "loop", ease: "easeInOut", duration: 1 },
+                        opacity: { duration: 2, ease: "linear", delay: 5 }
+                    }}
+                    className="flex flex-col justify-center items-center gap-2"
+                >
+                    <p className="text-4xl">
+                        {languageContext?.language == "en" ? "Scroll down to see more" : "Lướt xuống để xem thêm"}
+                    </p>
+                    <div className="flex flex-row justify-center items-center gap-3 text-2xl">
+                        <FaArrowDown />
+                        <FaArrowDown />
+                        <FaArrowDown />
+                    </div>
+                </motion.div>
+            </AnimatePresence>
+        </div>
     )
 }
 
 const BannerBackground = ({ index } : { index: number }) => {
     const bgList = [
-        "/test/testbg.png",
-        "/test/diningbg.png"
+        "/backgrounds/bg-1.jpg",
+        "/backgrounds/bg-2.png",
+        "/backgrounds/bg-10.jpg",
     ]
 
     const bannerList = [
+        <SloganBanner key={"slogan_banner"} />,
         <ExperienceBanner key={"experience_banner"} />,
         <ZilliaxBanner key={"zilliax_banner"} />
     ]
 
-    const [height, setHeight] = useState(-1);
     const [opacity, setOpacity] = useState(1);
     const { scrollY } = useScroll();
     const navigationBarContext = useNavigationBar();
 
     useEffect(() => {
-        setHeight(window.innerHeight);
         navigationBarContext?.setVisible(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        const onScroll = () => {
-            if (height < 0) {
-                setHeight(window.innerHeight);
-            }
-
-            setHeight(Math.max(window.innerHeight - scrollY.get(), 0));
-
-            if (height > window.innerHeight / 2) {
-                navigationBarContext?.setVisible(false);
-            } else {
-                navigationBarContext?.setVisible(true);
-            }
-
-            setOpacity((height - window.innerHeight / 4) / (window.innerHeight / 2));
+    scrollY.on("change", (newVal) => {
+        if (newVal < window.innerHeight / 2) {
+            navigationBarContext?.setVisible(false);
+        } else {
+            navigationBarContext?.setVisible(true);
         }
-    
-        window.addEventListener("scroll", onScroll);
 
-        return () => {
-            window.removeEventListener("scroll", onScroll);
-        }
-    }, [height, navigationBarContext, scrollY]);
+        setOpacity((window.innerHeight / 2 - newVal) / (window.innerHeight / 2));
+    });
 
     return (
         <div className="fixed w-full h-screen -z-20 bg-black">
@@ -106,8 +122,8 @@ const BannerBackground = ({ index } : { index: number }) => {
                     />
                 </AnimatePresence>
                 <motion.div
-                    className="absolute w-full z-10 flex justify-center items-center"
-                    animate={{ height: height, opacity: opacity }}
+                    className="fixed w-full h-full z-10 flex justify-center items-center"
+                    animate={{ opacity: opacity }}
                     transition={{ type: false }}
                 >
                     <AnimatePresence mode="wait">
@@ -119,25 +135,72 @@ const BannerBackground = ({ index } : { index: number }) => {
     )
 }
 
+const SloganBanner = () => {
+    const languageContext = useLanguage();
+
+    return (
+        <motion.div className="w-full h-full flex flex-col justify-center items-center gap-10">
+            <motion.div
+                key={"slogan_logo"}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.75, type: "spring" }}
+            >
+                <Image
+                    src="/GBA Logo.png"
+                    width={2560}
+                    height={1040}
+                    alt="Company Logo"
+                    className="w-auto h-20 drop-shadow-lg/75"
+                />
+            </motion.div>
+            <div className={`${sloganFont.className} flex flex-col justify-center items-center text-shadow-sm gap-5`}>
+                <motion.span
+                    key={"slogan_1"}
+                    className="text-[8rem] leading-none whitespace-nowrap drop-shadow-xl/50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.75, type: "spring", delay: 0.25 }}
+                >
+                    {languageContext?.language == "en" ? "Together" : "Cùng nhau"}
+                </motion.span>
+                <motion.span
+                    key={"slogan_2"}
+                    className="text-[5rem] leading-none whitespace-nowrap drop-shadow-xl/50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.75, type: "spring", delay: 0.5 }}
+                >
+                    {languageContext?.language == "en" ? "we build" : "xây dựng"}
+                </motion.span>
+                <motion.span
+                    key={"slogan_3"}
+                    className="text-[8rem] leading-none whitespace-nowrap drop-shadow-xl/50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.75, type: "spring", delay: 0.75 }}
+                >
+                    {languageContext?.language == "en" ? "The Best" : "đỉnh cao"}
+                </motion.span>
+            </div>
+        </motion.div>
+    )
+}
+
 const ExperienceBanner = () => {
     const languageContext = useLanguage();
 
     return (
         <motion.div className="w-full h-full flex flex-col justify-center items-center gap-5">
-            <motion.img
-                key="experience_decor_1"  
-                src={"/test/decor.png"}
-                className="w-[40%] h-auto grayscale-100 brightness-200 scale-y-[-1] -mb-5"
-                initial={{ opacity: 0, y: "20vh" }}
-                animate={{ opacity: 1, y: "0%" }}
-                exit={{ opacity: 0, y: "20vh" }}
-                transition={{ duration: 0.75, type: "spring", delay: 0.75 }}
-            />
-            <div className={`${experienceFont.className} flex flex-col justify-center items-start text-shadow-sm`}>
+            <div className={`${experienceFont.className} flex flex-col justify-center items-center text-shadow-sm`}>
                 <p>
                     <motion.span
                         key={"experience_number"}
-                        className="text-[13rem] leading-none whitespace-nowrap"
+                        className="text-[15rem] leading-none whitespace-nowrap drop-shadow-xl/50"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -147,35 +210,26 @@ const ExperienceBanner = () => {
                     </motion.span>
                     <motion.span
                         key={"experience_text_1"}
-                        className="text-5xl leading-none whitespace-nowrap"
+                        className="text-7xl leading-none whitespace-nowrap drop-shadow-xl/50"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.75, type: "spring", delay: 0.25 }}
                     >
-                        {languageContext?.language == "en" ? "years" : "năm"}
+                        {languageContext?.language == "en" ? "years of" : "năm"}
                     </motion.span>
                 </p>
                 <motion.p
                     key={"experience_text_2"}
-                    className="text-5xl leading-none whitespace-nowrap"
+                    className="text-7xl leading-none whitespace-nowrap drop-shadow-xl/50"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.75, type: "spring", delay: 0.5 }}
                 >
-                        {languageContext?.language == "en" ? "of vast experience" : "kinh nghiệm dồi dào"}
+                    {languageContext?.language == "en" ? "interior design and build" : "thiết kế và thi công nội thất"}
                 </motion.p>
             </div>
-            <motion.img
-                key="experience_decor_2"  
-                src={"/test/decor.png"}
-                className="w-[40%] h-auto grayscale-100 brightness-200"   
-                initial={{ opacity: 0, y: "20vh" }}
-                animate={{ opacity: 1, y: "0%" }}
-                exit={{ opacity: 0, y: "20vh" }}
-                transition={{ duration: 0.75, type: "spring", delay: 0.75 }}
-            />
         </motion.div>
     )
 }
@@ -278,7 +332,7 @@ const BannerForeground = ({ index, setIndex } : { index: number, setIndex: Dispa
         >
             <div
                 className="absolute w-full h-full bg-transparent cursor-pointer"
-                onClick={() => setIndex((index + 1) % 2)}
+                onClick={() => setIndex((index + 1) % 3)}
             ></div>
         </motion.div>
     )
@@ -296,7 +350,7 @@ const AboutUsSection = () => {
             viewport={{ amount: 0.25 }}
         >
             <motion.div
-                className={"relative w-[75%] mr-10 h-full flex flex-col justify-center items-start gap-10"}
+                className={"relative w-[75%] mr-10 h-full flex flex-col justify-center items-start gap-10 group overflow-hidden"}
                 variants={{
                     initial: { translateX: "-20rem", opacity: 0 },
                     inView: { translateX: "0", opacity: 1 }
@@ -304,11 +358,11 @@ const AboutUsSection = () => {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
             >
                 <Image
-                    src={"/test/diningbg.png"}
+                    src={"/backgrounds/bg-3.jpg"}
                     alt="Project Background"
                     width={4492}
                     height={2995}
-                    className="absolute w-auto h-full object-cover brightness-30 shadow-lg/50"
+                    className="absolute w-auto h-full object-cover brightness-30 shadow-lg/50 group-hover:scale-120 duration-200"
                 />
                 <p className={`w-full px-20 text-5xl text-white z-10 ${titleFont.className}`}>
                     { languageContext?.language == "en" ? "About us" : "Về chúng tôi" }
@@ -318,7 +372,7 @@ const AboutUsSection = () => {
                     languageContext?.language == "en" ?
                     "Established in 2007, Global Brother Associates (GBA) is one of Vietnam's top design company focusing in Architecture, Interior Decoration, Construction, MEP works and Furniture Supply to Turnkey Projects."
                     :
-                    "Established in 2007, Global Brother Associates (GBA) is one of Vietnam's top design company focusing in Architecture, Interior Decoration, Construction, MEP works and Furniture Supply to Turnkey Projects."
+                    "Thành lập năm 2007, Global Brother Associates (GBA) là một trong những công ty thiết kế hàng đầu tại Việt Nam, chuyên về kiến trúc, trang trí nội thất, xây dựng, hệ thống cơ điện (MEP) và cung cấp nội thất cho các dự án trọn gói."
                 }
                 </p>
             </motion.div>
@@ -344,7 +398,7 @@ const AboutUsSection = () => {
                     className="w-full h-auto p-10 bg-red-500 text-white flex flex-col justify-center items-start gap-5
                         hover:bg-black duration-200 cursor-pointer shadow-lg/50"
                     target="_blank"
-                    href={fetchImageOrFile("gba-profile.pdf")}
+                    href={fetchImageOrFile("iso.pdf")}
                 >
                     <p className="text-4xl text-left font-semibold">{languageContext?.language == "en" ? "See our ISO Certifications" : "Chứng chỉ ISO"}</p>
                     <FaArrowRightLong className="text-4xl" />
@@ -363,7 +417,7 @@ const StatisticsFactoid = ({ value, desc, delay }: { value: string, desc: string
                 initial: { translateY: "10rem", opacity: 0, transition: { delay: 0 } }
             }}
             whileInView={{ translateY: "0", opacity: 1 }}
-            className="relative w-1/5 aspect-2 bg-[#000000] p-5 pl-12 flex flex-col
+            className="relative w-1/5 aspect-2 bg-gray-700 p-5 pl-12 flex flex-col
                 justify-center items-start overflow-hidden shadow-lg/50"
             viewport={{ amount: 0.25 }}
             transition={{ duration: 0.5, ease: "easeInOut", delay: delay }}
@@ -421,28 +475,33 @@ const ProjectsSection = () => {
     const projects = [
         {
             name: "RMIT Academic B2",
-            type: "Education",
-            src: "/test/diningbg.png"
+            type: languageContext?.language == "en" ? "Education" : "Giáo dục",
+            src: "/backgrounds/project-1.jpg",
+            url: "/projects/rmit-academic-b2"
         },
         {
-            name: "RMIT Academic B3",
-            type: "Education",
-            src: "/test/testbg.png"
+            name: "Jardin Des Sens",
+            type: languageContext?.language == "en" ? "Food & Beverages" : "Đồ ăn & thức uống",
+            src: "/backgrounds/project-2.jpg",
+            url: "projects/jardin-des-sens-saigon"
         },
         {
-            name: "RMIT Academic B4",
-            type: "Education",
-            src: "/test/diningbg.png"
+            name: "Huong Bien Hotel",
+            type: languageContext?.language == "en" ? "Hotel & Resort" : "Khách sạn & Resort",
+            src: "/backgrounds/project-3.jpg",
+            url: "/projects/huong-bien-hotel"
         },
         {
-            name: "RMIT Academic B5",
-            type: "Education",
-            src: "/test/testbg.png"
+            name: "Nike Office",
+            type: languageContext?.language == "en" ? "Office" : "Văn phòng",
+            src: "/backgrounds/project-4.jpg",
+            url: "/projects/nike-office"
         },
         {
-            name: "RMIT Academic B6",
-            type: "Education",
-            src: "/test/diningbg.png"
+            name: "AEON Xuan Thuy",
+            type: languageContext?.language == "en" ? "Others" : "Khác",
+            src: "/backgrounds/project-5.jpg",
+            url: "/projects/aeon-xuan-thuy-ha-noi"
         },
     ]
 
@@ -532,7 +591,7 @@ const ProjectsSection = () => {
             <div className="absolute w-auto h-auto bottom-0 left-0 mb-10 ml-10">
                 <AnimatePresence mode="wait">
                     <motion.div
-                        className="flex flex-col justify-start items-start"
+                        className="flex flex-col justify-start items-start gap-5"
                         key={`project_info_${index}`}
                         initial={{ x: -40, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
@@ -543,7 +602,7 @@ const ProjectsSection = () => {
                         <div className="w-auto flex flex-row justify-start items-end gap-20">
                             <p className="text-5xl text-shadow-lg">{projects[index].type}</p>
                             <Link
-                                href={"/"}
+                                href={projects[index].url}
                                 className="text-2xl text-shadow-lg mb-0.5 underline underline-offset-4"
                             >
                                 {languageContext?.language == "en" ? "View details" : "Xem chi tiết"}
@@ -601,23 +660,35 @@ const WhyUsSection = () => {
             <div className="w-auto h-full flex flex-row justify-center items-center gap-10 group">
                 <WhyUsFactoid
                     title={languageContext?.language == "en" ? "Services" : "Dịch Vụ"}
-                    desc="One of Vietnam's premier companies in design and build."
-                    bg="/test/diningbg.png"
+                    desc={languageContext?.language == "en" ?
+                        "One of Vietnam's leading companies in interior design and build." :
+                        "Một trong những công ty thiết kế và thi công nội thất hàng đầu tại Việt Nam."
+                    }
+                    bg="/backgrounds/bg-4.jpg"
                 />
                 <WhyUsFactoid
                     title={languageContext?.language == "en" ? "Prices" : "Giá Cả"}
-                    desc="We offer the best price for the best services."
-                    bg="/test/diningbg.png"
+                    desc={languageContext?.language == "en" ?
+                        "We offer a reasonable price for the best services." :
+                        "Giá cả phải chăng cho dịch vụ tốt nhất."
+                    }
+                    bg="/backgrounds/bg-5.jpg"
                 />
                 <WhyUsFactoid
                     title={languageContext?.language == "en" ? "Professional" : "Chuyên Nghiệp"}
-                    desc="An experienced, creative, young and enthusiastic team ready to support."
-                    bg="/test/diningbg.png"
+                    desc={languageContext?.language == "en" ?
+                        "An experienced, creative, and enthusiastic team ready to support." :
+                        "Đội ngũ giàu kinh nghiệm, sáng tạo và đam mê luôn sẵn sàng hỗ trợ."
+                    }
+                    bg="/backgrounds/bg-6.jpg"
                 />
                 <WhyUsFactoid
                     title={languageContext?.language == "en" ? "Factory" : "Sản Xuất"}
-                    desc="Massive and customizable production for your designs."
-                    bg="/test/diningbg.png"
+                    desc={languageContext?.language == "en" ?
+                        "Massive and customizable production for your designs." :
+                        "Nhà máy quy mô lớn có thể tuỳ chỉnh cho mọi thiết kế của bạn."
+                    }
+                    bg="/backgrounds/bg-7.jpg"
                 />
             </div>
         </div>
@@ -627,9 +698,15 @@ const WhyUsSection = () => {
 const ClientsSection = () => {
     const languageContext = useLanguage();
     const clientList = [
-        "/GBA Logo.png",
-        "/test/rock.png",
-        "/GBA Logo.png",
+        "/backgrounds/client-1.png",
+        "/backgrounds/client-2.png",
+        "/backgrounds/client-3.png",
+        "/backgrounds/client-4.png",
+        "/backgrounds/client-5.jpg",
+        "/backgrounds/client-6.png",
+        "/backgrounds/client-7.png",
+        "/backgrounds/client-8.png",
+        "/backgrounds/client-9.png",
     ]
 
     return (
@@ -638,7 +715,7 @@ const ClientsSection = () => {
             className="relative w-full h-[40vh] flex flex-row justify-between items-center overflow-hidden"
         >
             <Image
-                src={"/test/diningbg.png"}
+                src={"/backgrounds/bg-8.jpg"}
                 alt="Project Background"
                 width={4492}
                 height={2995}
@@ -662,9 +739,9 @@ const ClientsSection = () => {
                         <motion.div
                             className="relative w-[33.3%] h-full flex justify-start items-center flex-none"
                             key={"client_" + i}
-                            animate={{ x: ["0%", "-300%"] }}
+                            animate={{ x: ["0%", "-900%"] }}
                             transition={{
-                                x: { repeat: Infinity, repeatType: "loop", duration: 15, ease: "linear" },
+                                x: { repeat: Infinity, repeatType: "loop", duration: 25, ease: "linear" },
                             }}
                         >
                             <Image
@@ -833,7 +910,7 @@ const ContactUsSection = () => {
             className="relative w-full h-[40vh] flex flex-row justify-between items-center overflow-hidden"
         >
             <Image
-                src={"/test/diningbg.png"}
+                src={"/backgrounds/bg-9.jpg"}
                 alt="Project Background"
                 width={4492}
                 height={2995}
@@ -849,8 +926,8 @@ const ContactUsSection = () => {
                     <div className="text-3xl flex flex-row justify-start items-center gap-3">
                         <PiMapPin className="flex-none" />
                         <p>
-                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" :
-                                "88 Thích Quảng Đức, Quận 5, Phường Phú Nhuận, Thành phố Hồ Chí Minh"}
+                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Duc Nhuan Ward, HCMC" :
+                                "88 Thích Quảng Đức, Phường Đức Nhuận, Thành phố Hồ Chí Minh"}
                         </p>
                     </div>
                     <div className="text-3xl flex flex-row justify-start items-center gap-3">

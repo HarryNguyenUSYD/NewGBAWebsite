@@ -31,15 +31,16 @@ export default function Footer() {
     const languageContext = useLanguage();
 
     return (
-        <div className="w-full h-[50vh] px-5 bg-black flex flex-col justify-between items-center">
-            <div className="w-full h-full mx-5 mt-5 flex flex-row justify-start items-center gap-5">
+        <div className="w-full h-auto px-5 py-5 bg-black flex flex-col justify-between items-center">
+            <div className="w-full h-full mx-5 flex flex-row justify-center items-start gap-5">
                 <FooterColumn title={languageContext?.language == "en" ? "Pages" : "Trang"} propList={[
                     { text: languageContext?.language == "en" ? "Homepage" : "Trang chủ", href: "/" },
-                    { text: languageContext?.language == "en" ? "Projects" : "Dự án", href: "/" },
-                    { text: languageContext?.language == "en" ? "Articles" : "Bài báo", href: "/" },
-                    { text: languageContext?.language == "en" ? "Clients" : "Khách hàng", href: "/" },
-                    { text: languageContext?.language == "en" ? "Partners" : "Đối tác", href: "/" },
-                    { text: languageContext?.language == "en" ? "Careers" : "Tuyển dụng", href: "/" },
+                    { text: languageContext?.language == "en" ? "Projects" : "Dự án", href: "/projects" },
+                    { text: languageContext?.language == "en" ? "Articles" : "Bài báo", href: "/articles" },
+                    { text: languageContext?.language == "en" ? "Clients" : "Khách hàng", href: "/clients" },
+                    { text: languageContext?.language == "en" ? "Careers" : "Tuyển dụng", href: "/careers" },
+                    { text: languageContext?.language == "en" ? "Vendors" : "Cung cấp", href: "/vendors" },
+                    { text: languageContext?.language == "en" ? "Resources" : "Tài nguyên", href: "/resources" },
                 ]} />
                 <div className="h-full flex flex-col justify-start items-start gap-1">
                     <p className={`text-2xl`}>
@@ -49,8 +50,8 @@ export default function Footer() {
                     <div className="text-lg flex flex-row justify-start items-center gap-3">
                         <PiMapPin className="flex-none" />
                         <p>
-                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" :
-                                "88 Thích Quảng Đức, Quận 5, Phường Phú Nhuận, Thành phố Hồ Chí Minh"}
+                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Duc Nhuan Ward, HCMC" :
+                                "88 Thích Quảng Đức, Phường Đức Nhuận, Thành phố Hồ Chí Minh"}
                         </p>
                     </div>
                     <div className="text-lg flex flex-row justify-start items-center gap-3">
@@ -91,7 +92,7 @@ export default function Footer() {
                     <FaMapMarkedAlt />
                 </Link>
             </div>
-            <div className={`w-full h-auto mb-3 text-center text-lg text-white opacity-20`}>
+            <div className={`w-full h-auto text-center text-lg text-white opacity-20`}>
                 © Global Brother Associates 2025. All rights reserved
             </div>
         </div>

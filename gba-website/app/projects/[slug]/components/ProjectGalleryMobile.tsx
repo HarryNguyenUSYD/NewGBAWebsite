@@ -1,25 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { GoDotFill, GoDot } from "react-icons/go";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { fetchProjectImage } from "@/backend/fetchFunctions";
+import { ProjectTableType } from "@/backend/tables";
 
 export default function ProjectGallery({
     index,
-    maxIndex,
-    disableGallery
-}: { index: number, maxIndex: number, disableGallery: () => void }) {
+    disableGallery,
+    project
+}: { index: number, disableGallery: () => void, project: ProjectTableType | null }) {
     const [currentIndex, setCurrentIndex] = useState(index);
+    const length = useMemo(() => project?.images.length ?? 0, [project]);
 
     const nextIndex = () => {
-        setCurrentIndex((currentIndex + 1) % maxIndex);
+        setCurrentIndex((currentIndex + 1) % length);
     }
 
     const prevIndex = () => {
-        setCurrentIndex((currentIndex - 1 >= 0) ? currentIndex - 1 : maxIndex - 1);
+        setCurrentIndex((currentIndex - 1 >= 0) ? currentIndex - 1 : length - 1);
     }
 
     return (
@@ -46,7 +49,7 @@ export default function ProjectGallery({
                     </div>
                 </button>
                 <Image
-                    src={"/test/louisbg.png"}
+                    src={fetchProjectImage(`${project?.folderName}${project?.images[currentIndex]}`)}
                     width={938}
                     height={1440}
                     alt="Project Image"
@@ -72,38 +75,26 @@ export default function ProjectGallery({
                         animate={{ left: `calc(50vw - 2.75rem - ${currentIndex} * 5.5rem)` }}
                         transition={{ duration: 0.25 }}
                     >
-                        {Array.from({ length: maxIndex }, (_, i) => (i + 1)).map((_, i) => (
+                        {project?.images.map((image, i) => (
                             <button
                                 key={`mini_image_${i}`}
                                 className={`w-20 h-full ${currentIndex == i ? "opacity-100 scale-120" : "opacity-50 scale-100"}
                                     duration-150 cursor-pointer`}
                                 onClick={() => setCurrentIndex(i)}
                             >
-                                {
-                                    i % 2 == 0 ? (
-                                        <Image
-                                            src={"/test/diningbg.png"}
-                                            width={4492}
-                                            height={2995}
-                                            alt="Project Image"
-                                            className="w-full h-full object-contain"
-                                        />
-                                    ) : (
-                                        <Image
-                                            src={"/test/louisbg.png"}
-                                            width={938}
-                                            height={1440}
-                                            alt="Project Image"
-                                            className="w-full h-full object-contain"
-                                        />
-                                    )
-                                }
+                                <Image
+                                    src={fetchProjectImage(`${project?.folderName}${image}`)}
+                                    width={4492}
+                                    height={2995}
+                                    alt="Project Image"
+                                    className="w-full h-full object-contain"
+                                />
                             </button>
                         ))}
                     </motion.div>
                 </div>
                 <div className="w-full h-[25%] flex flex-row justify-center items-center gap-1">
-                    {Array.from({ length: maxIndex }, (_, i) => (i + 1)).map((_, i) => (
+                    {Array.from({ length: length }, (_, i) => (i + 1)).map((_, i) => (
                         <div
                             key={`index_pointer_${i}`}
                         >

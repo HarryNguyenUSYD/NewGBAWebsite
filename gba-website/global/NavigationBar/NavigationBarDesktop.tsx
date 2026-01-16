@@ -51,9 +51,6 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
             <div className="w-full h-(--navbar-height) flex flex-row justify-between items-center bg-black z-50">
                 <CompanyLogo />
                 <div className="w-full h-full ml-10 flex flex-row justify-start items-center">
-                    <NavLink href="/">
-                        {languageContext?.language == "en" ? "Homepage" : "Trang Chủ"}
-                    </NavLink>
                     <NavLink href="/projects">
                         {languageContext?.language == "en" ? "Projects" : "Dự Án"}
                     </NavLink>
@@ -66,17 +63,23 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
                     <NavLink href="/careers">
                         {languageContext?.language == "en" ? "Careers" : "Tuyển Dụng"}
                     </NavLink>
+                    <NavLink href="/vendors">
+                        {languageContext?.language == "en" ? "Vendors" : "Cung Cấp"}
+                    </NavLink>
+                    <NavLink href="/resources">
+                        {languageContext?.language == "en" ? "Resources" : "Tài Nguyên"}
+                    </NavLink>
                 </div>
                 <ContactUsButton />
                 <LanguageSetter />
             </div>
             {isHomepage && (
                 <div
-                    className="w-full h-(--on-this-page-height) mt-2 flex flex-row justify-center items-center"
+                    className="w-full h-(--on-this-page-height) mt-2 flex flex-row justify-center items-center pointer-events-none"
                 >
                     <div
                         className="w-auto h-auto flex flex-row justify-center items-center
-                        bg-white border-2 rounded-full border-black"
+                        bg-white border-2 rounded-full border-black pointer-events-auto"
                     >
                         <MiniNavLink id={"about-us"} active={active}>
                             {languageContext?.language == "en" ? "About us" : "Về chúng tôi"}

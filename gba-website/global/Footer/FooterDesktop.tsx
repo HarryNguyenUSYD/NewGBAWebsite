@@ -11,14 +11,14 @@ interface FooterProps {
 }
 
 const FooterColumn = ({ title, propList }: { title: string, propList: FooterProps[] }) => (
-    <div className="w-auto h-full mt-10 flex flex-col justify-start items-start gap-2">
+    <div className="w-auto h-full flex flex-col justify-center items-start gap-2">
         <p className="text-3xl">{title}</p>
         <div className="w-full border border-white"></div>
         {(propList.length < 5) ?
         (
             propList.map((props, i) => ( <FooterLink key={`footer_column_${title}_${i}`} props={props} /> ))
         ) : (
-            <div className="flex flex-row justify-center items-center gap-10">
+            <div className="flex flex-row justify-center items-start gap-10">
                 <div className="flex flex-col justify-start items-start gap-2">
                     {propList.slice(0, Math.floor(propList.length / 2)).map((props, i) => ( <FooterLink key={`footer_column_${title}_${i}`} props={props} /> ))}
                 </div>
@@ -32,7 +32,7 @@ const FooterColumn = ({ title, propList }: { title: string, propList: FooterProp
 
 const FooterLink = ({ props }: { props: FooterProps }) => (
     <Link
-        className="text-xl"
+        className="text-2xl"
         href={props.href}
     >
         {props.text}
@@ -44,29 +44,15 @@ export default function Footer() {
 
     return (
         <div className="w-full h-[40vh] bg-black flex flex-col justify-between items-center">
-            <div className="w-full h-full mx-10 flex flex-row justify-around items-center gap-5">
+            <div className="w-full h-full flex flex-row justify-around items-center gap-5">
                 <FooterColumn title={languageContext?.language == "en" ? "Pages" : "Trang"} propList={[
                     { text: languageContext?.language == "en" ? "Homepage" : "Trang chủ", href: "/" },
-                    { text: languageContext?.language == "en" ? "Projects" : "Dự án", href: "/" },
-                    { text: languageContext?.language == "en" ? "Articles" : "Bài báo", href: "/" },
-                    { text: languageContext?.language == "en" ? "Clients" : "Khách hàng", href: "/" },
-                    { text: languageContext?.language == "en" ? "Partners" : "Đối tác", href: "/" },
-                    { text: languageContext?.language == "en" ? "Careers" : "Tuyển dụng", href: "/" },
-                ]} />
-                <FooterColumn title={languageContext?.language == "en" ? "Projects" : "Dự án"} propList={[
-                    { text: languageContext?.language == "en" ? "Apartment" : "Căn hộ", href: "/" },
-                    { text: languageContext?.language == "en" ? "Bank" : "Ngân hàng", href: "/" },
-                    { text: languageContext?.language == "en" ? "Consulate" : "Lãnh sự quán", href: "/" },
-                    { text: languageContext?.language == "en" ? "Education" : "Giáo dục", href: "/" },
-                    { text: languageContext?.language == "en" ? "Food & Beverage" : "Đồ ăn & thức uống", href: "/" },
-                    { text: languageContext?.language == "en" ? "Hotel & Resort" : "Khách sạn & Resort", href: "/" },
-                    { text: languageContext?.language == "en" ? "Office" : "Văn phòng", href: "/" },
-                    { text: languageContext?.language == "en" ? "Shop" : "Cửa hàng", href: "/" },
-                    { text: languageContext?.language == "en" ? "Showroom" : "Phòng trưng bày", href: "/" },
-                    { text: languageContext?.language == "en" ? "Others" : "Khác", href: "/" },
-                ]} />
-                <FooterColumn title={languageContext?.language == "en" ? "Articles" : "Bài báo"} propList={[
-                    { text: languageContext?.language == "en" ? "Newest Article" : "Bài báo mới nhất", href: "/" }
+                    { text: languageContext?.language == "en" ? "Projects" : "Dự án", href: "/projects" },
+                    { text: languageContext?.language == "en" ? "Articles" : "Bài báo", href: "/articles" },
+                    { text: languageContext?.language == "en" ? "Clients" : "Khách hàng", href: "/clients" },
+                    { text: languageContext?.language == "en" ? "Careers" : "Tuyển dụng", href: "/careers" },
+                    { text: languageContext?.language == "en" ? "Vendors" : "Cung cấp", href: "/vendors" },
+                    { text: languageContext?.language == "en" ? "Resources" : "Tài nguyên", href: "/resources" },
                 ]} />
                 <div className="h-[80%] border-2 border-white"></div>
                 <div className="h-full flex flex-col justify-center items-start gap-5">
@@ -76,8 +62,8 @@ export default function Footer() {
                     <div className="text-2xl flex flex-row justify-start items-center gap-3">
                         <PiMapPin className="flex-none" />
                         <p>
-                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Ward 05, Phu Nhuan District, HCMC" :
-                                "88 Thích Quảng Đức, Quận 5, Phường Phú Nhuận, Thành phố Hồ Chí Minh"}
+                            {languageContext?.language == "en" ? "88 Thich Quang Duc, Duc Nhuan Ward, HCMC" :
+                                "88 Thích Quảng Đức, Phường Đức Nhuận, Thành phố Hồ Chí Minh"}
                         </p>
                     </div>
                     <div className="text-2xl flex flex-row justify-start items-center gap-3">

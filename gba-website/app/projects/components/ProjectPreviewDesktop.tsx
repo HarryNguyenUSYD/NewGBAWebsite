@@ -4,56 +4,14 @@ import { projectFont } from "@/global/fonts/fonts"
 import { useLanguage } from "@/global/LanguageContext/LanguageContext"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { typesOption } from "./consts"
 
 export const ProjectPreview = ({ project, isEven }: { project: ProjectTableType | null, isEven: boolean }) => {
     const languageContext = useLanguage();
 
-    const typesOption: { value: string, label: string }[] = [
-        {
-            value: "apartment",
-            label: languageContext?.language == "en" ? "Apartment" : "Căn hộ",
-        },
-        {
-            value: "bank",
-            label: languageContext?.language == "en" ? "Bank" : "Ngân hàng",
-        },
-        {
-            value: "consulate",
-            label: languageContext?.language == "en" ? "Consulate" : "Lãnh sự quán",
-        },
-        {
-            value: "education",
-            label: languageContext?.language == "en" ? "Education" : "Giáo dục",
-        },
-        {
-            value: "foodbeverage",
-            label: languageContext?.language == "en" ? "Food & Beverage" : "Đồ ăn & thức uống",
-        },
-        {
-            value: "hotelresort",
-            label: languageContext?.language == "en" ? "Hotel & Resort" : "Khách sạn & Resort",
-        },
-        {
-            value: "office",
-            label: languageContext?.language == "en" ? "Office" : "Văn phòng",
-        },
-        {
-            value: "shop",
-            label: languageContext?.language == "en" ? "Shop" : "Cửa hàng",
-        },
-        {
-            value: "showroom",
-            label: languageContext?.language == "en" ? "Showroom" : "Phòng trưng bày",
-        },
-        {
-            value: "others",
-            label: languageContext?.language == "en" ? "Others" : "Khác",
-        },
-    ];
-
     return (
         <motion.a
-            href={"/projects/project"}
+            href={`/projects/${project?.id}`}
             className={`relative w-[70vw] h-[60vh] group mt-25 flex flex-row
                 justify-between items-center`}
             animate="initial"
@@ -95,7 +53,7 @@ export const ProjectPreview = ({ project, isEven }: { project: ProjectTableType 
                     </div>
                 </>
             )}
-            <div className="relative w-[40vw] h-full">
+            <div className="relative w-[40vw] h-full z-10">
                 <motion.div className="absolute w-full h-full border-4 p-3 border-black bg-white
                     group-hover:border-red-500 duration-150 z-3">
                     <Image
@@ -187,7 +145,13 @@ export const ProjectPreview = ({ project, isEven }: { project: ProjectTableType 
                         </p>
                         <p className="text-lg">
                             <span className="font-bold">{languageContext?.language == "en" ? "Type: " : "Loại dự án: "}</span>
-                            <span>{typesOption.find((p) => project?.projectType === p.value)?.label}</span>
+                            <span>
+                                {
+                                    languageContext?.language == "en" ?
+                                    typesOption.find((p) => project?.projectType === p.value)?.labelEn :
+                                    typesOption.find((p) => project?.projectType === p.value)?.labelVi
+                                }
+                            </span>
                         </p>
                         <p className="text-lg">
                             <span className="font-bold">{languageContext?.language == "en" ? "Address: " : "Địa chỉ: "}</span>

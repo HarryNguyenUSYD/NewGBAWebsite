@@ -1,21 +1,31 @@
 "use client";
 
-import { Career } from "@/backend/tables";
+import { fetchCareers, fetchImageOrFile } from "@/backend/fetchFunctions";
+import { CareersTableType, CareerTableType } from "@/backend/tables";
 import { titleFont } from "@/global/fonts/fonts";
 import { useLanguage } from "@/global/LanguageContext/LanguageContext";
 import SiteWrapper from "@/global/SiteWrapper/SiteWrapperDesktop";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { FiPhone, FiFileText } from "react-icons/fi";
 import { HiOutlineMail, HiOutlineDownload } from "react-icons/hi";
 
 export default function Careers() {
+    const [careers, setCareers] = useState<CareersTableType | null>(null);
+
+    useEffect(() => {
+        fetchCareers()
+            .then(setCareers)
+            .catch(console.error)
+    }, []);
+
     return (
         <SiteWrapper topMargin={true}>
             <TitleSection />
             <div className="flex flex-row justify-around items-start my-20 px-20">
                 <div className="w-[70vw] flex flex-col justify-center items-center gap-5">
-                    <ListSection />
+                    <ListSection careers={careers} />
                 </div>
                 <GuideSection />
             </div>
@@ -40,14 +50,14 @@ const TitleSection = () => {
                     {languageContext?.language == "en" ? "Careers" : "Tuyển dụng"}
                 </p>
                 <p className="text-4xl">
-                    {languageContext?.language == "en" ? "-- insert slogan here --" : "-- insert slogan here --"}
+                    {languageContext?.language == "en" ? "Join our team and grow our future" : "Đồng hành cùng chúng tôi và kiến tạo tương lai"}
                 </p>
             </div>
         </div>
     )
 }
 
-const JobListing = ({ props } : { props: Career }) => {
+const JobListing = ({ dir, career } : { dir: string, career: CareerTableType }) => {
     const languageContext = useLanguage();
 
     return (
@@ -55,28 +65,30 @@ const JobListing = ({ props } : { props: Career }) => {
             className="w-full h-[25vh] p-10 border-4 border-gray-700 flex flex-col
                 justify-between items-center rounded-3xl text-black"
         >
-            <p className="w-full text-5xl">{props.name}</p>
+            <p className="w-full text-5xl">{languageContext?.language == "en" ? career.nameEn : career.nameVi}</p>
             <div className="w-full flex flex-row justify-between items-center">
-                <p className={`${props.status == "fulltime" && "bg-red-300"} ${props.status == "parttime" && "bg-yellow-300"}
-                    ${props.status == "internship" && "bg-green-300"} whitespace-nowrap text-2xl rounded-full px-5 py-1 mr-5`}>
-                        {props.status == "fulltime" && (languageContext?.language == "en" ? "Full-time" : "Toàn thời gian")}
-                        {props.status == "parttime" && (languageContext?.language == "en" ? "Part-Time" : "Toàn thời gian")}
-                        {props.status == "internship" && (languageContext?.language == "en" ? "Internship" : "Tập sự")}
+                <p className={`${career.status == "fulltime" && "bg-red-300"} ${career.status == "parttime" && "bg-yellow-300"}
+                    ${career.status == "internship" && "bg-green-300"} whitespace-nowrap text-2xl rounded-full px-5 py-1 mr-5`}>
+                        {career.status == "fulltime" && (languageContext?.language == "en" ? "Full-time" : "Toàn thời gian")}
+                        {career.status == "parttime" && (languageContext?.language == "en" ? "Part-Time" : "Bán thời gian")}
+                        {career.status == "internship" && (languageContext?.language == "en" ? "Internship" : "Tập sự")}
                 </p>
                 <div className="w-full flex flex-row justify-end items-center gap-5">
                     <Link
-                        href={"/"}
+                        href={fetchImageOrFile(`${dir}${career.jobDescFileName}`)}
                         className="w-auto flex flex-row justify-start items-center gap-3 text-2xl
                             rounded-full bg-gray-200 px-5 py-1 hover:bg-red-500 hover:text-white duration-150"
+                        target="_blank"
                     >
                         <FiFileText />
                         {languageContext?.language == "en" ? "View Job Description" : "Xem mô tả công việc"}
                     </Link>
                     <Link
                         download={true}
-                        href={"/"}
+                        href={fetchImageOrFile(`${dir}${career.jobDescFileName}`)}
                         className="w-auto flex flex-row justify-start items-center gap-3 text-2xl
                             rounded-full bg-gray-200 px-5 py-1 hover:bg-red-500 hover:text-white duration-150"
+                        target="_blank"
                     >
                         <HiOutlineDownload />
                         {languageContext?.language == "en" ? "Download Job Description" : "Tải mô tả công việc"}
@@ -87,16 +99,15 @@ const JobListing = ({ props } : { props: Career }) => {
     )
 } 
 
-const ListSection = () => {
+const ListSection = ({ careers } : { careers: CareersTableType | null }) => {
     return (
         <div className="w-full h-auto px-10 flex flex-col justify-start items-center gap-10">
-            {Array.from({ length: 10 }, (_, j) => j + 1).map((_, k) => (
-                <JobListing key={`position_${k}`} props={{
-                    name: `Position Name ${k}`,
-                    jobDescFileName: "",
-                    count: 1,
-                    status: "internship"
-                }} />
+            {careers?.careers.map((c, k) => (
+                <JobListing
+                    key={`position_${k}`}
+                    dir={careers.careerDir}
+                    career={c}
+                />
             ))}
         </div>
     )
