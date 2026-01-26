@@ -47,8 +47,8 @@ const TitleSection = () => {
             <Image
                 src={"/test/diningbg.png"}
                 alt="Title background"
-                width={4992}
-                height={2995}
+                width={1620}
+                height={1080}
                 className="absolute w-full h-full object-cover brightness-30"
             />
             <div className="absolute w-auto h-auto bottom-0 right-0 m-20 flex flex-col justify-end items-end gap-10 text-right">
@@ -74,13 +74,13 @@ const ListSection = ({ clients, page } : { clients: ClientsTableType | null, pag
                         key={`client_${i}`}
                         className="relative w-full h-[40vh] flex flex-row justify-center items-center gap-10"
                     >
-                        {(i % 2 == 1) && <div className={`w-1/2 h-[80%] p-10 flex flex-col justify-start items-start gap-2
+                        {(i % 2 == 1) && <div className={`w-1/2 h-[80%] p-10 flex flex-col justify-center items-start gap-2
                             bg-gray-700`}>
                             <p className="w-full text-center text-3xl text-white">{languageContext?.language == "en" ? client.en : client.vi}</p>
                             <p className="text-white text-2xl">
                                 {languageContext?.language == "en" ? "Completed Projects:" : "Dự án hoàn thành:"}
                             </p>
-                            {client.projects.map((name, k) => (
+                            {client.projects.slice(0, 3).map((name, k) => (
                                 <div
                                     className="w-full flex flex-row justify-start items-center gap-2 text-2xl group"
                                     key={`client_${i}_${k}`}
@@ -115,13 +115,13 @@ const ListSection = ({ clients, page } : { clients: ClientsTableType | null, pag
                                 alt="Decorative Border"
                             />
                         </div>
-                        {(i % 2 == 0) && <div className={`w-1/2 h-[80%] p-10 flex flex-col justify-start items-start gap-2
+                        {(i % 2 == 0) && <div className={`w-1/2 h-[80%] p-10 flex flex-col justify-center items-start gap-2
                             bg-red-500`}>
                             <p className="w-full text-center text-3xl text-white">{languageContext?.language == "en" ? client.en : client.vi}</p>
                             <p className="text-white text-2xl">
                                 {languageContext?.language == "en" ? "Completed Projects:" : "Dự án hoàn thành:"}
                             </p>
-                            {client.projects.map((name, k) => (
+                            {client.projects.slice(0, 3).map((name, k) => (
                                 <div
                                     className="w-full flex flex-row justify-start items-center gap-2 text-2xl group"
                                     key={`client_${i}_${k}`}

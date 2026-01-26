@@ -6,6 +6,7 @@ import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight, MdOutlineKeybo
 import { navFont } from "../fonts/fonts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PageSelectionProps } from "./consts";
+import { scrollToTop } from "./utils";
 
 const PageButton = ({
     isCurrent,
@@ -29,6 +30,7 @@ const PageButton = ({
                 e.preventDefault();
                 props.setPage(props.page);
                 router.push(href, { scroll: false });
+                scrollToTop();
             }}
             aria-current="page"
         >
@@ -60,6 +62,7 @@ const MoveButton = ({
                 e.preventDefault();
                 props.setPage(props.page + direction);
                 router.push(href, { scroll: false });
+                scrollToTop();
             }}
             aria-current="page"
         >
@@ -83,13 +86,11 @@ const PageSelectionBar = ({
                 Icon={MdOutlineKeyboardArrowLeft}
                 direction={-1}
             />}
-            {props.page - 3 >= 1 && <div className="text-2xl text-black">...</div>}
-            {props.page - 2 >= 1 && <PageButton props={{...props, page: props.page - 2}} />}
+            {props.page - 2 >= 1 && <div className="text-2xl text-black">...</div>}
             {props.page - 1 >= 1 && <PageButton props={{...props, page: props.page - 1}} />}
             <PageButton isCurrent props={props} />
             {props.page + 1 <= props.maxPage && <PageButton props={{...props, page: props.page + 1}} />}
-            {props.page + 2 <= props.maxPage && <PageButton props={{...props, page: props.page + 2}} />}
-            {props.page + 3 <= props.maxPage && <div className="text-2xl text-black">...</div>}
+            {props.page + 2 <= props.maxPage && <div className="text-2xl text-black">...</div>}
             {props.page < props.maxPage && <MoveButton
                 props={props}
                 Icon={MdOutlineKeyboardArrowRight}

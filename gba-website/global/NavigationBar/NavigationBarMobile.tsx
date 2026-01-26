@@ -50,11 +50,11 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
                             exit={{ top: "-100vh" }}
                             transition={{ duration: 1, type: "spring" }}
                         >
-                            <NavLink href="/">
-                                {languageContext?.language == "en" ? "Homepage" : "Trang Chủ"}
-                            </NavLink>
                             <NavLink href="/projects">
                                 {languageContext?.language == "en" ? "Projects" : "Dự Án"}
+                            </NavLink>
+                            <NavLink href="/resources">
+                                {languageContext?.language == "en" ? "Resources" : "Nguồn Lực"}
                             </NavLink>
                             <NavLink href="/articles">
                                 {languageContext?.language == "en" ? "Articles" : "Bài Báo"}
@@ -64,6 +64,9 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
                             </NavLink>
                             <NavLink href="/careers">
                                 {languageContext?.language == "en" ? "Careers" : "Tuyển Dụng"}
+                            </NavLink>
+                            <NavLink href="/vendors">
+                                {languageContext?.language == "en" ? "Vendors" : "Cung Cấp"}
                             </NavLink>
                             <div className="w-full h-auto p-2 flex flex-row justify-around items-center">
                                 <ContactUsButton />

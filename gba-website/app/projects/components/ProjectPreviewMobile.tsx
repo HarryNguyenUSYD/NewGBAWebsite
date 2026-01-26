@@ -18,8 +18,8 @@ export const ProjectPreview = ({ project }: { project: ProjectTableType | null }
                 <div className="absolute w-full h-full border-4 p-2 border-black bg-white z-3">
                     <Image
                         src={fetchProjectImage(`${project?.folderName}${project?.coverImage}`)}
-                        width={4492}
-                        height={2995}
+                        width={1920}
+                        height={1080}
                         alt="Project Cover Image"
                         className="w-full h-full object-cover"
                     />

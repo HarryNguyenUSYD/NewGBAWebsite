@@ -16,6 +16,7 @@ import Link from "next/link";
 import { experienceFont, navFont, sloganFont, titleFont, zilliaxFont } from "@/global/fonts/fonts";
 import { fetchArticles, fetchImageOrFile } from "@/backend/fetchFunctions";
 import type { ArticlesTableType } from "@/backend/tables";
+import { projects } from "./consts";
 
 
 export default function Home() {
@@ -77,7 +78,7 @@ const BannerScroll = () => {
 const BannerBackground = ({ index } : { index: number }) => {
     const bgList = [
         "/backgrounds/bg-1.jpg",
-        "/backgrounds/bg-2.png",
+        "/backgrounds/bg-2.jpg",
         "/backgrounds/bg-10.jpg",
     ]
 
@@ -360,8 +361,8 @@ const AboutUsSection = () => {
                 <Image
                     src={"/backgrounds/bg-3.jpg"}
                     alt="Project Background"
-                    width={4492}
-                    height={2995}
+                    width={1920}
+                    height={1080}
                     className="absolute w-auto h-full object-cover brightness-30 shadow-lg/50 group-hover:scale-120 duration-200"
                 />
                 <p className={`w-full px-20 text-5xl text-white z-10 ${titleFont.className}`}>
@@ -446,7 +447,7 @@ const StatisticsSection = () => {
             className="w-full h-auto px-40 py-10 bg-white flex flex-row justify-between items-center"
         >
             <StatisticsFactoid
-                value="18+"
+                value={`${new Date().getFullYear() - 2007}+`}
                 desc={languageContext?.language == "en" ? "years of experience" : "năm kinh nghiệm"}
                 delay={0}
             />
@@ -471,45 +472,13 @@ const StatisticsSection = () => {
 
 const ProjectsSection = () => {
     const languageContext = useLanguage();
-
-    const projects = [
-        {
-            name: "RMIT Academic B2",
-            type: languageContext?.language == "en" ? "Education" : "Giáo dục",
-            src: "/backgrounds/project-1.jpg",
-            url: "/projects/rmit-academic-b2"
-        },
-        {
-            name: "Jardin Des Sens",
-            type: languageContext?.language == "en" ? "Food & Beverages" : "Đồ ăn & thức uống",
-            src: "/backgrounds/project-2.jpg",
-            url: "projects/jardin-des-sens-saigon"
-        },
-        {
-            name: "Huong Bien Hotel",
-            type: languageContext?.language == "en" ? "Hotel & Resort" : "Khách sạn & Resort",
-            src: "/backgrounds/project-3.jpg",
-            url: "/projects/huong-bien-hotel"
-        },
-        {
-            name: "Nike Office",
-            type: languageContext?.language == "en" ? "Office" : "Văn phòng",
-            src: "/backgrounds/project-4.jpg",
-            url: "/projects/nike-office"
-        },
-        {
-            name: "AEON Xuan Thuy",
-            type: languageContext?.language == "en" ? "Others" : "Khác",
-            src: "/backgrounds/project-5.jpg",
-            url: "/projects/aeon-xuan-thuy-ha-noi"
-        },
-    ]
-
-    const [index, setIndex] = useState(0);
-    const [timer, setTimer] = useState(0);
-    const [timerWidth, setTimerWidth] = useState(0);
+    
     const INTERVAL = 10000;
     const TIMER_INTERVAL = 50;
+
+    const [index, setIndex] = useState(0);
+    const [timer, setTimer] = useState(INTERVAL);
+    const [timerWidth, setTimerWidth] = useState(0);
     const ref = useRef(null);
 
     useEffect(() => {
@@ -522,7 +491,7 @@ const ProjectsSection = () => {
         }, TIMER_INTERVAL);
 
         return () => clearInterval(interval);
-    }, [projects.length, timer]);
+    }, [timer]);
 
     return (
         <motion.div
@@ -600,7 +569,9 @@ const ProjectsSection = () => {
                     >
                         <p className={`text-6xl text-shadow-lg ${titleFont.className}`}>{projects[index].name}</p>
                         <div className="w-auto flex flex-row justify-start items-end gap-20">
-                            <p className="text-5xl text-shadow-lg">{projects[index].type}</p>
+                            <p className="text-5xl text-shadow-lg">
+                                {languageContext?.language == "en" ? projects[index].typeEn : projects[index].typeVi}
+                            </p>
                             <Link
                                 href={projects[index].url}
                                 className="text-2xl text-shadow-lg mb-0.5 underline underline-offset-4"
@@ -637,8 +608,8 @@ const WhyUsFactoid = ({ title, desc, bg }: {
                 <Image
                     src={bg}
                     alt="Factoid Background"
-                    width={4492}
-                    height={2995}
+                    width={1920}
+                    height={1080}
                     className="absolute w-full h-full object-cover brightness-30 group-hover:scale-120 duration-150"
                 />
             </div>
@@ -717,8 +688,8 @@ const ClientsSection = () => {
             <Image
                 src={"/backgrounds/bg-8.jpg"}
                 alt="Project Background"
-                width={4492}
-                height={2995}
+                width={1920}
+                height={1080}
                 className="absolute w-full h-full object-cover brightness-30 shadow-lg/50"
             />
             <div className="relative w-full h-full flex flex-row justify-between items-center">
@@ -747,8 +718,8 @@ const ClientsSection = () => {
                             <Image
                                 src={client}
                                 alt="Project Background"
-                                width={4492}
-                                height={2995}
+                                width={1920}
+                                height={1080}
                                 className="absolute w-full h-full object-contain p-10"
                             />
                         </motion.div>
@@ -912,8 +883,8 @@ const ContactUsSection = () => {
             <Image
                 src={"/backgrounds/bg-9.jpg"}
                 alt="Project Background"
-                width={4492}
-                height={2995}
+                width={1920}
+                height={1080}
                 className="absolute w-full h-full object-cover brightness-30 shadow-lg/50"
             />
             <div className="relative w-full h-full flex flex-row justify-between items-center">

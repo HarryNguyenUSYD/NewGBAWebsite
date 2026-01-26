@@ -7,6 +7,7 @@ import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight, MdOutlineKeybo
 import { navFont } from "../fonts/fonts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PageSelectionProps } from "./consts";
+import { scrollToTop } from "./utils";
 
 const PageButton = ({
     isCurrent,
@@ -31,6 +32,7 @@ const PageButton = ({
                 e.preventDefault();
                 props.setPage(props.page);
                 router.push(href, { scroll: false });
+                scrollToTop();
             }}
             aria-current="page"
         >
@@ -63,6 +65,7 @@ const MoveButton = ({
                 e.preventDefault();
                 props.setPage(props.page + direction);
                 router.push(href, { scroll: false });
+                scrollToTop();
             }}
             aria-current="page"
         >

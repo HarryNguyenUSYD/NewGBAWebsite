@@ -37,8 +37,8 @@ const TitleSection = () => {
             <Image
                 src={"/test/diningbg.png"}
                 alt="Title background"
-                width={4992}
-                height={2995}
+                width={1620}
+                height={1080}
                 className="absolute w-full h-full object-cover brightness-30"
             />
             <div className="absolute w-auto h-auto bottom-0 right-0 m-5 flex flex-col justify-end items-end gap-5 text-right">

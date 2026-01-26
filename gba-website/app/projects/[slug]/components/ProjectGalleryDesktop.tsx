@@ -50,8 +50,8 @@ export default function ProjectGallery({
                 </button>
                 <Image
                     src={fetchProjectImage(`${project?.folderName}${project?.images[currentIndex]}`)}
-                    width={4492}
-                    height={2995}
+                    width={1920}
+                    height={1080}
                     alt={`Project Image Full`}
                     className="w-full h-full object-contain"
                 />
@@ -84,8 +84,8 @@ export default function ProjectGallery({
                             >
                                 <Image
                                     src={fetchProjectImage(`${project?.folderName}${image}`)}
-                                    width={4492}
-                                    height={2995}
+                                    width={1920}
+                                    height={1080}
                                     alt="Project Image"
                                     className="w-full h-full object-contain"
                                 />

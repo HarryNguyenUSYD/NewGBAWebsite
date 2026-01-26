@@ -54,6 +54,9 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
                     <NavLink href="/projects">
                         {languageContext?.language == "en" ? "Projects" : "Dự Án"}
                     </NavLink>
+                    <NavLink href="/resources">
+                        {languageContext?.language == "en" ? "Resources" : "Nguồn Lực"}
+                    </NavLink>
                     <NavLink href="/articles">
                         {languageContext?.language == "en" ? "Articles" : "Bài Báo"}
                     </NavLink>
@@ -65,9 +68,6 @@ export default function NavigationBar({ isHomepage }: { isHomepage: boolean }) {
                     </NavLink>
                     <NavLink href="/vendors">
                         {languageContext?.language == "en" ? "Vendors" : "Cung Cấp"}
-                    </NavLink>
-                    <NavLink href="/resources">
-                        {languageContext?.language == "en" ? "Resources" : "Tài Nguyên"}
                     </NavLink>
                 </div>
                 <ContactUsButton />

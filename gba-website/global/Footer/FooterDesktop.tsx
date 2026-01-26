@@ -48,11 +48,11 @@ export default function Footer() {
                 <FooterColumn title={languageContext?.language == "en" ? "Pages" : "Trang"} propList={[
                     { text: languageContext?.language == "en" ? "Homepage" : "Trang chủ", href: "/" },
                     { text: languageContext?.language == "en" ? "Projects" : "Dự án", href: "/projects" },
+                    { text: languageContext?.language == "en" ? "Resources" : "Nguồn lực", href: "/resources" },
                     { text: languageContext?.language == "en" ? "Articles" : "Bài báo", href: "/articles" },
                     { text: languageContext?.language == "en" ? "Clients" : "Khách hàng", href: "/clients" },
                     { text: languageContext?.language == "en" ? "Careers" : "Tuyển dụng", href: "/careers" },
                     { text: languageContext?.language == "en" ? "Vendors" : "Cung cấp", href: "/vendors" },
-                    { text: languageContext?.language == "en" ? "Resources" : "Tài nguyên", href: "/resources" },
                 ]} />
                 <div className="h-[80%] border-2 border-white"></div>
                 <div className="h-full flex flex-col justify-center items-start gap-5">

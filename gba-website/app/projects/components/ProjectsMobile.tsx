@@ -12,7 +12,7 @@ import PageSelection from "@/global/PageSelection/PageSelectionMobile";
 import { ProjectsTableType, ProjectTableType } from "@/backend/tables";
 import { useSearchParams } from "next/navigation";
 import { fetchProjects } from "@/backend/fetchFunctions";
-import { ITEMS_PER_PAGE, ProjectSearchProps } from "./consts";
+import { ITEMS_PER_PAGE, ProjectSearchProps, typesOption } from "./consts";
 import { useRouter } from "next/navigation";
 export default function Projects() {
     const router = useRouter();
@@ -122,8 +122,8 @@ const TitleSection = () => {
             <Image
                 src={"/test/diningbg.png"}
                 alt="Title background"
-                width={4992}
-                height={2995}
+                width={1620}
+                height={1080}
                 className="absolute w-full h-full object-cover brightness-30"
             />
             <div className="absolute w-[60%] h-auto bottom-0 right-0 m-5 flex flex-col justify-end items-end gap-5 text-right">
@@ -150,49 +150,6 @@ const SearchSection = ({ props } : { props: ProjectSearchProps }) => {
             props.setExcludeTypes((prev) => [...prev, name]);
         }
     }
-
-    const typesOption: { value: string, label: string }[] = [
-        {
-            value: "apartment",
-            label: languageContext?.language == "en" ? "Apartment" : "Căn hộ",
-        },
-        {
-            value: "bank",
-            label: languageContext?.language == "en" ? "Bank" : "Ngân hàng",
-        },
-        {
-            value: "consulate",
-            label: languageContext?.language == "en" ? "Consulate" : "Lãnh sự quán",
-        },
-        {
-            value: "education",
-            label: languageContext?.language == "en" ? "Education" : "Giáo dục",
-        },
-        {
-            value: "foodbeverage",
-            label: languageContext?.language == "en" ? "Food & Beverage" : "Đồ ăn & thức uống",
-        },
-        {
-            value: "hotelresort",
-            label: languageContext?.language == "en" ? "Hotel & Resort" : "Khách sạn & Resort",
-        },
-        {
-            value: "office",
-            label: languageContext?.language == "en" ? "Office" : "Văn phòng",
-        },
-        {
-            value: "shop",
-            label: languageContext?.language == "en" ? "Shop" : "Cửa hàng",
-        },
-        {
-            value: "showroom",
-            label: languageContext?.language == "en" ? "Showroom" : "Phòng trưng bày",
-        },
-        {
-            value: "others",
-            label: languageContext?.language == "en" ? "Others" : "Khác",
-        },
-    ];
 
     const orderOption: { value: string, label: string }[] = [
         {
@@ -288,7 +245,9 @@ const SearchSection = ({ props } : { props: ProjectSearchProps }) => {
                                                 {!props.excludeTypes.includes(opt.value) && <ImCheckboxChecked className="w-full h-full"/>}
                                                 {props.excludeTypes.includes(opt.value) && <ImCheckboxUnchecked className="w-full h-full"/>}
                                             </div>
-                                            <span className="text-xl whitespace-nowrap select-none">{opt.label}</span>
+                                            <span className="text-xl whitespace-nowrap select-none">
+                                                {languageContext?.language == "en" ? opt.labelEn : opt.labelVi}
+                                            </span>
                                         </label>
                                     ))}
                                 </div>

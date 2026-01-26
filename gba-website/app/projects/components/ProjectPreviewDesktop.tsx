@@ -58,8 +58,8 @@ export const ProjectPreview = ({ project, isEven }: { project: ProjectTableType 
                     group-hover:border-red-500 duration-150 z-3">
                     <Image
                         src={fetchProjectImage(`${project?.folderName}${project?.coverImage}`)}
-                        width={4492}
-                        height={2995}
+                        width={1920}
+                        height={1080}
                         alt="Project Cover Image"
                         className="w-full h-full object-cover"
                     />

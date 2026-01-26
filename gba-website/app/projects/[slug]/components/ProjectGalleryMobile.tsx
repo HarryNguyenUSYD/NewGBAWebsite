@@ -84,8 +84,8 @@ export default function ProjectGallery({
                             >
                                 <Image
                                     src={fetchProjectImage(`${project?.folderName}${image}`)}
-                                    width={4492}
-                                    height={2995}
+                                    width={1920}
+                                    height={1080}
                                     alt="Project Image"
                                     className="w-full h-full object-contain"
                                 />
