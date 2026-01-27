@@ -9,10 +9,10 @@ import { useEffect, useRef, useState } from "react";
 import { boardOfDirectorsImages, factoryImages, holidayImages } from "./consts";
 
 export default function Resources() {
-
     return (
         <SiteWrapper topMargin={true}>
             <TitleSection />
+            <OfficeSection />
             <FactorySection />
             <ManagementSection />
             <HolidaySection />
@@ -39,6 +39,69 @@ const TitleSection = () => {
                 <p className="text-4xl">
                     {languageContext?.language == "en" ? "The strength to realise your vision" : "Sức mạnh để hiện thực hoá tầm nhìn của bạn"}
                 </p>
+            </div>
+        </div>
+    )
+}
+
+const OfficeSection = () => {
+    const languageContext = useLanguage();
+
+    return (
+        <div className="relative w-full h-[80vh] flex flex-row justify-center items-center gap-10 p-30 pb-0">
+            <div className="w-1/2 h-full flex flex-col justify-end items-start gap-10">
+                <div className="w-full h-1/3 overflow-hidden shadow-lg/50">
+                    <Image
+                        src="/backgrounds/office-2.jpg"
+                        width={1350}
+                        height={1080}
+                        alt="Main office view"
+                        className="w-full h-full object-cover object-center shadow-lg/50 hover:scale-125 duration-150"
+                    />
+                </div>
+                <div className="w-full h-2/3 overflow-hidden shadow-lg/50">
+                    <Image
+                        src="/backgrounds/office-1.jpg"
+                        width={1350}
+                        height={1080}
+                        alt="Office front view"
+                        className="w-full h-full object-cover object-bottom shadow-lg/50 hover:scale-125 duration-150"
+                    />
+                </div>
+            </div>
+            <div className="w-1/2 h-full flex flex-col justify-between items-center gap-10">
+                <div
+                    className="w-full h-2/3 flex flex-col justify-center items-end gap-5 text-right
+                        bg-red-500 text-white p-10 shadow-lg/50"
+                >
+                    <p className={`text-4xl ${titleFont.className}`}>
+                        {languageContext?.language == "en" ? "Our Office" : "Văn phòng của chúng tôi"}
+                    </p>
+                    <p className="text-4xl w-2/3">
+                        {languageContext?.language == "en" ? "88 Thich Quang Duc, Duc Nhuan Ward, HCMC" :
+                            "88 Thích Quảng Đức, Phường Đức Nhuận, Thành phố Hồ Chí Minh"}
+                    </p>
+                </div>
+                <div className="w-full h-1/3 flex flex-row justify-center items-center gap-10">
+                    <div className="w-1/2 h-full overflow-hidden shadow-lg/50">
+                        <Image
+                            src="/backgrounds/office-3.jpg"
+                            width={1350}
+                            height={1080}
+                            alt="Office front view"
+                            className="w-full h-full object-cover hover:scale-125 duration-150"
+                        />
+                    </div>
+                    <div className="w-1/2 h-full overflow-hidden shadow-lg/50">
+                        <Image
+                            src="/backgrounds/office-4.jpg"
+                            width={1350}
+                            height={1080}
+                            alt="Meeting room view"
+                            className="w-full h-full object-cover hover:scale-125 duration-150"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     )
@@ -196,7 +259,7 @@ const ManagementSection = () => {
                                 src={director.src}
                                 width={500}
                                 height={500}
-                                alt={`${director.name}'s Photograph`}
+                                alt={`${languageContext?.language == "en" ? director.nameEn : director.nameVi}'s Photograph`}
                                 className="w-full h-full object-cover rounded-full border-red-500 border-8 duration-100"
                             />
                         </motion.button>
@@ -213,10 +276,10 @@ const ManagementSection = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <p className="text-5xl text-gray-700 font-bold">
-                        {boardOfDirectorsImages[index].name}
+                        {languageContext?.language == "en" ? boardOfDirectorsImages[index].nameEn : boardOfDirectorsImages[index].nameVi}
                     </p>
                     <p className="text-3xl text-gray-500">
-                        {boardOfDirectorsImages[index].position}
+                        {languageContext?.language == "en" ? boardOfDirectorsImages[index].positionEn : boardOfDirectorsImages[index].positionVi}
                     </p>
                 </motion.div>
             </AnimatePresence>
@@ -228,29 +291,33 @@ const HolidaySection = () => {
     const languageContext = useLanguage();
 
     return (
-        <div className="w-full h-auto flex flex-col justify-center items-center gap-20 my-10">
+        <div className="w-full h-auto flex flex-col justify-center items-center gap-20 my-10 mb-20">
             <p className={`${titleFont.className} text-6xl text-black`}>
                 {languageContext?.language == "en" ? "Holiday with GBA" : "Vui chơi cùng GBA"}
             </p>
-            <div className="w-full h-auto flex flex-col justify-start items-center gap-20">
-                {holidayImages.map((image, i) => (
-                    <div
-                        key={`holiday_image_${i}`}
-                        className="w-[50vw] h-auto p-10 border-4 border-black bg-white flex flex-col
-                            justify-center items-center gap-5 rotate-3 drop-shadow-xl/50"
-                    >
-                        <Image
-                            src={image.src}
-                            width={1920}
-                            height={1080}
-                            alt="Project Image"
-                            className="w-full h-auto object-fill border-2 border-black"
-                        />
-                        <p className="text-4xl italic text-black">
-                            {languageContext?.language == "en" ? image.labelEn : image.labelVn}
-                        </p>
-                    </div>
-                ))}
+            <div className="w-full h-auto flex flex-col justify-center items-center">
+                <div className="w-auto h-auto grid grid-cols-2 gap-20">
+                    {holidayImages.map((image, i) => (
+                        <div
+                            key={`holiday_image_${i}`}
+                            className="w-[33vw] h-[50vh] p-8 border-4 border-black bg-white flex flex-col
+                                justify-start items-center gap-5 rotate-3 hover:rotate-0 duration-150 drop-shadow-xl/50"
+                        >
+                            <div className="w-full h-full overflow-hidden border-2 border-black">
+                                <Image
+                                    src={image.src}
+                                    width={1920}
+                                    height={1080}
+                                    alt="Project Image"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <p className="w-full h-auto text-4xl italic text-black text-center">
+                                {languageContext?.language == "en" ? image.labelEn : image.labelVn}
+                            </p>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     )

@@ -49,7 +49,7 @@ const TitleSection = () => {
     return (
         <div className="relative w-full h-[50vh]">
             <Image
-                src={"/test/diningbg.png"}
+                src={"/backgrounds/bg-5.jpg"}
                 alt="Title background"
                 width={1620}
                 height={1080}

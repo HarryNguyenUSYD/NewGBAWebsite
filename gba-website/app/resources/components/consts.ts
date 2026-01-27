@@ -58,67 +58,101 @@ export const holidayImages: {
         src: "/backgrounds/holiday-2.jpg",
         labelEn: "Binh Chau - 2023",
         labelVn: "Bình Châu - 2023"
+    },
+    {
+        src: "/backgrounds/holiday-4.jpg",
+        labelEn: "Long Hai - 2023",
+        labelVn: "Long Hải - 2023"
+    },
+    {
+        src: "/backgrounds/holiday-3.jpg",
+        labelEn: "Da Lat - 2020",
+        labelVn: "Đà Lạt - 2020"
     }
 ]
 
 export const boardOfDirectorsImages: {
   src: string;
-  name: string;
-  position: string;
+  nameVi: string;
+  nameEn: string;
+  positionVi: string;
+  positionEn: string;
 }[] = [
   {
     src: "/bod/nguyen-phu-binh.jpg",
-    name: "Nguyen Phu Binh",
-    position: "Chairman",
-  },
-  {
-    src: "/bod/hua-minh-do.jpg",
-    name: "Hua Minh Do",
-    position: "Construction Director",
-  },
-  {
-    src: "/bod/nguyen-thi-thao.jpg",
-    name: "Nguyen Thi Thao",
-    position: "Project Director",
+    nameVi: "Nguyễn Phú Bình",
+    nameEn: "Nguyen Phu Binh",
+    positionVi: "Chủ tịch Hội đồng thành viên",
+    positionEn: "Chairman",
   },
   {
     src: "/bod/nguyen-the-viet-hung.jpg",
-    name: "Nguyen The Viet Hung",
-    position: "Design Director",
+    nameVi: "Nguyễn Thế Việt Hưng",
+    nameEn: "Nguyen The Viet Hung",
+    positionVi: "Giám đốc thiết kế",
+    positionEn: "Design Director",
   },
   {
-    src: "/bod/vo-van-hung.jpg",
-    name: "Vo Van Hung",
-    position: "Factory Manager",
+    src: "/bod/hua-minh-do.jpg",
+    nameVi: "Hứa Minh Độ",
+    nameEn: "Hua Minh Do",
+    positionVi: "Giám đốc thi công",
+    positionEn: "Construction Director",
   },
   {
-    src: "/bod/nguyen-dang-thi.jpg",
-    name: "Nguyen Dang Thi",
-    position: "Project Management Lead",
-  },
-  {
-    src: "/bod/nguyen-hoang-viet.jpg",
-    name: "Nguyen Hoang Viet",
-    position: "Purchasing Manager",
+    src: "/bod/nguyen-thi-thao.jpg",
+    nameVi: "Nguyễn Thị Thảo",
+    nameEn: "Nguyen Thi Thao",
+    positionVi: "Giám đốc dự án",
+    positionEn: "Project Director",
   },
   {
     src: "/bod/huynh-ngoc-van-thy.jpg",
-    name: "Huynh Ngoc Van Thy",
-    position: "Administration & HR Manager",
+    nameVi: "Huỳnh Ngọc Vân Thy",
+    nameEn: "Huynh Ngoc Van Thy",
+    positionVi: "Trưởng bộ phận Hành chánh - Nhân sự",
+    positionEn: "Administration & HR Manager",
+  },
+  {
+    src: "/bod/nguyen-dang-thi.jpg",
+    nameVi: "Nguyễn Đăng Thi",
+    nameEn: "Nguyen Dang Thi",
+    positionVi: "Trưởng bộ phận Quản lý dự án",
+    positionEn: "Project Management Lead",
+  },
+  {
+    src: "/bod/vo-van-hung.jpg",
+    nameVi: "Võ Văn Hùng",
+    nameEn: "Vo Van Hung",
+    positionVi: "Quản đốc Xưởng",
+    positionEn: "Factory Manager",
   },
   {
     src: "/bod/nguyen-thi-thanh-ha.jpg",
-    name: "Nguyen Thi Thanh Ha",
-    position: "Design Team Leader",
+    nameVi: "Nguyễn Thị Thanh Hà",
+    nameEn: "Nguyen Thi Thanh Ha",
+    positionVi: "Trưởng bộ phận Thiết kế",
+    positionEn: "Design Manager",
   },
   {
     src: "/bod/dinh-thi-hoan-my.jpg",
-    name: "Dinh Thi Hoan My",
-    position: "Chief Estimator",
+    nameVi: "Đinh Thị Hoàn Mỹ",
+    nameEn: "Dinh Thi Hoan My",
+    positionVi: "Trưởng bộ phận Dự toán",
+    positionEn: "Estimation Manager",
   },
   {
     src: "/bod/doan-thi-ngoc-nuong.jpg",
-    name: "Doan Thi Ngoc Nuong",
-    position: "Chief Accountant",
+    nameVi: "Đoàn Thị Ngọc Nương",
+    nameEn: "Doan Thi Ngoc Nuong",
+    positionVi: "Kế toán trưởng",
+    positionEn: "Chief Accountant",
+  },
+  {
+    src: "/bod/nguyen-hoang-viet.jpg",
+    nameVi: "Nguyễn Hoàng Việt",
+    nameEn: "Nguyen Hoang Viet",
+    positionVi: "Trưởng bộ phận Vật tư",
+    positionEn: "Purchasing Manager",
   },
 ];

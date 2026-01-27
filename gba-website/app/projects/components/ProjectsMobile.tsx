@@ -14,6 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { fetchProjects } from "@/backend/fetchFunctions";
 import { ITEMS_PER_PAGE, ProjectSearchProps, typesOption } from "./consts";
 import { useRouter } from "next/navigation";
+
 export default function Projects() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -120,7 +121,7 @@ const TitleSection = () => {
     return (
         <div className="relative w-full h-[50vh]">
             <Image
-                src={"/test/diningbg.png"}
+                src={"/backgrounds/bg-2.jpg"}
                 alt="Title background"
                 width={1620}
                 height={1080}
