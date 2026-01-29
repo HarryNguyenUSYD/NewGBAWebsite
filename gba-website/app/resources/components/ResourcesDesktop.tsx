@@ -239,7 +239,7 @@ const ManagementSection = () => {
             </p>
             <div className="w-full h-auto overflow-hidden">
                 <motion.div
-                    className="w-auto h-[25vw] flex flex-row justify-start items-center gap-[10vw]"
+                    className="w-auto h-auto my-10 flex flex-row justify-start items-center gap-[10vw]"
                     style={{ x: `${50 - 10.5}vw` }}
                     animate={{ translateX: `-${index * (15 + 10)}vw` }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
@@ -268,7 +268,7 @@ const ManagementSection = () => {
             </div>
             <AnimatePresence mode="wait">
                 <motion.div
-                    className="w-auto flex flex-col justify-center items-center gap-2"
+                    className="w-auto flex flex-col justify-center items-center gap-2 text-center"
                     key={`director_info_${index}`}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}

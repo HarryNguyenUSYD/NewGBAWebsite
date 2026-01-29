@@ -1,6 +1,8 @@
 import ArticlesMobile from "./components/ArticlesMobile";
 import ArticlesDesktop from "./components/ArticlesDesktop";
 import { Metadata } from "next";
+import { Suspense } from "react";
+import LoadingDiv from "@/global/Loading/LoadingDiv";
 
 export const metadata: Metadata = {
     title: "Articles | GBA",
@@ -9,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function Articles() {
     return (
-        <>
+        <Suspense fallback={<LoadingDiv />}>
             {/* Desktop */}
             <div className="hidden lg:block">
                 <ArticlesDesktop />
@@ -19,6 +21,6 @@ export default function Articles() {
             <div className="block lg:hidden">
                 <ArticlesMobile />
             </div>
-        </>
+        </Suspense>
     )
 }

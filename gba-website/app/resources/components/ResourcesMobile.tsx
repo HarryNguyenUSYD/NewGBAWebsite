@@ -232,14 +232,14 @@ const ManagementSection = () => {
 
     return (
         <div className="w-full h-auto flex flex-col justify-center items-center gap-5 mt-10 mb-20">
-            <p className={`${titleFont.className} text-6xl text-black`}>
+            <p className={`${titleFont.className} text-3xl text-black text-center`}>
                 {languageContext?.language == "en" ? "Our Management Team" : "Đội Ngũ Quản Lý"}
             </p>
             <div className="w-full h-auto overflow-hidden">
                 <motion.div
-                    className="w-auto h-[25vw] flex flex-row justify-start items-center gap-[10vw]"
-                    style={{ x: `${50 - 10.5}vw` }}
-                    animate={{ translateX: `-${index * (15 + 10)}vw` }}
+                    className="w-auto h-[60vw] flex flex-row justify-start items-center gap-[10vw]"
+                    style={{ x: `${50 - 25}vw` }}
+                    animate={{ translateX: `-${index * (40 + 10)}vw` }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                     {boardOfDirectorsImages.map((director, i) => (
@@ -250,7 +250,7 @@ const ManagementSection = () => {
                                 setIndex(i);
                                 setTimer(INTERVAL);
                             }}
-                            animate={{ width: (i === index) ? "20vw" : "15vw" }}
+                            animate={{ width: (i === index) ? "50vw" : "40vw" }}
                             transition={{ duration: 0.5, ease: "backInOut" }}
                         >
                             <motion.img
@@ -266,17 +266,17 @@ const ManagementSection = () => {
             </div>
             <AnimatePresence mode="wait">
                 <motion.div
-                    className="w-auto flex flex-col justify-center items-center gap-2"
+                    className="w-auto flex flex-col justify-center items-center gap-2 text-center"
                     key={`director_info_${index}`}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 20, opacity: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <p className="text-5xl text-gray-700 font-bold">
+                    <p className="text-3xl text-gray-700 font-bold">
                         {languageContext?.language == "en" ? boardOfDirectorsImages[index].nameEn : boardOfDirectorsImages[index].nameVi}
                     </p>
-                    <p className="text-3xl text-gray-500">
+                    <p className="text-2xl text-gray-500">
                         {languageContext?.language == "en" ? boardOfDirectorsImages[index].positionEn : boardOfDirectorsImages[index].positionVi}
                     </p>
                 </motion.div>
@@ -290,16 +290,16 @@ const HolidaySection = () => {
 
     return (
         <div className="w-full h-auto flex flex-col justify-center items-center gap-20 my-10 mb-20">
-            <p className={`${titleFont.className} text-6xl text-black`}>
+            <p className={`${titleFont.className} text-3xl text-black text-center`}>
                 {languageContext?.language == "en" ? "Holiday with GBA" : "Vui chơi cùng GBA"}
             </p>
             <div className="w-full h-auto flex flex-col justify-center items-center">
-                <div className="w-auto h-auto grid grid-cols-2 gap-20">
+                <div className="w-auto h-auto grid grid-cols-1 gap-20">
                     {holidayImages.map((image, i) => (
                         <div
                             key={`holiday_image_${i}`}
-                            className="w-[33vw] h-[50vh] p-8 border-4 border-black bg-white flex flex-col
-                                justify-start items-center gap-5 rotate-3 hover:rotate-0 duration-150 drop-shadow-xl/50"
+                            className="w-[80vw] h-[40vh] p-3 border-4 border-black bg-white flex flex-col
+                                justify-start items-center gap-2 rotate-3 hover:rotate-0 duration-150 drop-shadow-xl/50"
                         >
                             <div className="w-full h-full overflow-hidden border-2 border-black">
                                 <Image
@@ -310,7 +310,7 @@ const HolidaySection = () => {
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <p className="w-full h-auto text-4xl italic text-black text-center">
+                            <p className="w-full h-auto text-3xl italic text-black text-center">
                                 {languageContext?.language == "en" ? image.labelEn : image.labelVn}
                             </p>
                         </div>

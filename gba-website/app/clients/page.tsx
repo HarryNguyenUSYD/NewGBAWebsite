@@ -1,6 +1,8 @@
 import ClientsMobile from "./components/ClientsMobile";
 import ClientsDesktop from "./components/ClientsDesktop";
 import { Metadata } from "next";
+import { Suspense } from "react";
+import LoadingDiv from "@/global/Loading/LoadingDiv";
 
 export const metadata: Metadata = {
     title: "Clients | GBA",
@@ -9,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function Clients() {
     return (
-        <>
+        <Suspense fallback={<LoadingDiv />}>
             {/* Desktop */}
             <div className="hidden lg:block">
                 <ClientsDesktop />
@@ -19,6 +21,6 @@ export default function Clients() {
             <div className="block lg:hidden">
                 <ClientsMobile />
             </div>
-        </>
+        </Suspense>
     )
 }
