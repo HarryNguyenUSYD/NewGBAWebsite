@@ -347,7 +347,7 @@ const AboutUsSection = () => {
                     target="_blank"
                     href={fetchImageOrFile("gba-profile.pdf")}
                 >
-                    <p className="text-2xl text-center font-semibold">{languageContext?.language == "en" ? "Download our Company Profile" : "Hồ Sơ Năng Lực"}</p>
+                    <p className="text-2xl text-left font-semibold">{languageContext?.language == "en" ? "Download our Company Profile" : "Hồ Sơ Năng Lực"}</p>
                     <FaArrowRightLong className="text-2xl" />
                 </Link>
                 <Link
@@ -356,7 +356,7 @@ const AboutUsSection = () => {
                     target="_blank"
                     href={fetchImageOrFile("iso.pdf")}
                 >
-                    <p className="text-2xl text-center font-semibold">{languageContext?.language == "en" ? "See our ISO Certifications" : "Chứng chỉ ISO"}</p>
+                    <p className="text-2xl text-left font-semibold">{languageContext?.language == "en" ? "See our ISO Certifications" : "Chứng chỉ ISO"}</p>
                     <FaArrowRightLong className="text-2xl" />
                 </Link>
             </div>
@@ -385,7 +385,7 @@ const StatisticsSection = () => {
             id={"statistics"}
             className="w-full h-auto px-10 py-10 bg-white grid grid-cols-2 gap-5"
         >
-            <StatisticsFactoid value={`${new Date().getFullYear() - 2007}+`} desc={languageContext?.language == "en" ? "years of experience" : "năm kinh nghiệm"} />
+            <StatisticsFactoid value="18+" desc={languageContext?.language == "en" ? "years of experience" : "năm kinh nghiệm"} />
             <StatisticsFactoid value="999+" desc={languageContext?.language == "en" ? "projects" : "dự án"} />
             <StatisticsFactoid value="190+" desc={languageContext?.language == "en" ? "customers" : "khách hàng"} />
             <StatisticsFactoid value="100+" desc={languageContext?.language == "en" ? "employees" : "nhân viên"} />
