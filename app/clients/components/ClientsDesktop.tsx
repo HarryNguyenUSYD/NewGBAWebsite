@@ -9,31 +9,75 @@ import { TbCircleDotted } from "react-icons/tb";
 import { fetchClients, fetchImageOrFile } from "@/backend/fetchFunctions";
 import { useEffect, useState } from "react";
 import { ClientsTableType } from "@/backend/tables";
-import { ITEMS_PER_PAGE } from "./consts";
-import { useSearchParams } from "next/navigation";
+import { ClientsSearchProps, ITEMS_PER_PAGE } from "./consts";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FaCaretDown, FaCheck } from "react-icons/fa";
 
 export default function Clients() {
+    const languageContext = useLanguage();
+    const router = useRouter();
     const searchParams = useSearchParams();
     
     const [clients, setClients] = useState<ClientsTableType | null>(null);
+
     const [page, setPage] = useState(parseInt(searchParams.get("page") ?? "1"));
+    const [name, setName] = useState(searchParams.get("name") ?? "");
+    const [order, setOrder] = useState(searchParams.get("order") ?? "az");
+    const [finalClients, setFinalClients] = useState<ClientsTableType>([]);
+    
+    const handleSubmit = () => {
+        const sp = new URLSearchParams(searchParams.toString());
+        sp.delete("name");
+        sp.delete("order");
+
+        sp.set("name", name);
+        sp.set("order", order);
+
+        router.push(`/clients?${sp.toString()}`);
+
+        setFinalClients(clients?.filter((c) => {
+            if (name != "" && !c[languageContext?.language ?? "en"].toLowerCase().includes(name.toLowerCase())) { return false; }
+
+            return true;
+        }).sort((p1, p2) => {
+            switch (order) {
+                case "za":
+                    return p2.en.localeCompare(p1.en);
+                case "az":
+                default:
+                    return p1.en.localeCompare(p2.en);
+            }
+        }) ?? []);
+    }
 
     useEffect(() => {
         fetchClients()
             .then(setClients)
             .catch(console.error)
     }, []);
+
+    useEffect(() => {
+        handleSubmit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clients]);
     
     return (
         <SiteWrapper topMargin={true}>
             <TitleSection />
+            <SearchSection props={{
+                name,
+                setName,
+                order,
+                setOrder,
+                handleSubmit
+            }} />
             <PageSelection props={{
                 page,
                 setPage,
-                maxPage: Math.ceil((clients?.length ?? 1) / ITEMS_PER_PAGE),
+                maxPage: Math.ceil((finalClients?.length ?? 1) / ITEMS_PER_PAGE),
                 title: "clients"
             }}>
-                <ListSection page={page} clients={clients} />
+                <ListSection page={page} clients={finalClients} />
             </PageSelection>
         </SiteWrapper>
     );
@@ -59,6 +103,105 @@ const TitleSection = () => {
                     {languageContext?.language == "en" ? "Strong partnerships built on trust, quality, and results" : "Quan hệ đối tác bền vững được xây dựng trên niềm tin, chất lượng và hiệu quả"}
                 </p>
             </div>
+        </div>
+    )
+}
+
+const SearchSection = ({ props } : { props: ClientsSearchProps }) => {
+    const languageContext = useLanguage();
+    const [isSelectingOrder, setIsSelectingOrder] = useState(false);
+
+    const orderOption: { value: string, label: string }[] = [
+        {
+            value: "az",
+            label: languageContext?.language == "en" ? "Name (A - Z)" : "Tên (A - Z)",
+        },
+        {
+            value: "za",
+            label: languageContext?.language == "en" ? "Name (Z - A)" : "Tên (Z - A)",
+        },
+    ];
+
+    return (
+        <div className="relative w-full h-auto my-10 z-20">
+            <form
+                action=""
+                className="flex flex-col justify-center items-center gap-5"
+            >
+                <input
+                    type="text"
+                    value={props.name}
+                    placeholder={languageContext?.language == "en" ? "Search by name" : "Tìm theo tên"}
+                    className="w-[50vw] h-10 outline-none border-2 border-black text-black placeholder:text-gray-300
+                        p-5 rounded-full text-2xl"
+                    onChange={(e) => (props.setName(e.currentTarget.value))}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            props.handleSubmit();
+                        }
+                    }}
+                />
+                <div className="flex flex-row justify-center items-center gap-5">
+                    {/* Sort Projects Order */}
+                    <div className="relative w-auto h-auto flex flex-col justify-start items-center">
+                        <button
+                            onClick={() => setIsSelectingOrder(!isSelectingOrder)}
+                            type="button"
+                            className="w-full h-auto px-10 py-1 flex flex-row justify-center items-center gap-3
+                                rounded-full bg-white border-2 border-black text-black cursor-pointer
+                                hover:bg-gray-200 duration-150"
+                        >
+                            <p className="text-2xl">{languageContext?.language == "en" ? "Order by" : "Sắp xếp theo"}</p>
+                            <FaCaretDown className="text-2xl" />
+                        </button>
+                        {isSelectingOrder && (
+                            <div
+                                className="absolute top-10 mt-2 w-full h-auto bg-white overflow-hidden border-2 border-black rounded-2xl"
+                            >
+                                <div
+                                    className="w-full h-full overflow-y-auto scrollbar scrollbar-thumb-gray-700
+                                        scrollbar-track-gray-200"
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="order"
+                                        value={props.order}
+                                    />
+                                    {orderOption.map((opt) => (
+                                        <button
+                                            type="button"
+                                            key={opt.value}
+                                            className={`w-full px-3 cursor-pointer hover:bg-gray-200 text-black duration-100
+                                                flex flex-row justify-between items-center`}
+                                            onClick={() => props.setOrder(opt.value)}
+                                        >
+                                            <FaCheck
+                                                className={`text-xl`}
+                                                style={{ opacity: (props.order == opt.value) ? 100 : 0 }}
+                                            />
+                                            <span className="text-2xl whitespace-nowrap select-none">
+                                                {opt.label}
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    {/* Submit Button */}
+                    <input
+                        type="submit"
+                        value="Submit"
+                        className={`w-auto h-auto px-5 py-1 rounded-full flex flex-row justify-center items-center gap-3 cursor-pointer
+                            bg-gray-700 text-white hover:bg-red-500 duration-100 text-3xl`}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            props.handleSubmit();
+                        }}
+                    />
+                </div>
+            </form>
         </div>
     )
 }

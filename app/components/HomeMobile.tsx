@@ -672,7 +672,7 @@ const BulletinSection = () => {
             <div className="w-full h-1/2 flex flex-col justify-between items-center">
                 <div className="w-full h-auto flex flex-row justify-between items-end">
                     <p className={`text-3xl text-gray-800 ${titleFont.className}`}>
-                        {languageContext?.language == "en" ? "Articles" : "Tin tức"}
+                        {languageContext?.language == "en" ? "Bulletin" : "Bảng tin"}
                     </p>
                     <Link
                         className="text-xl border-2 px-5 text-gray-800 border-gray-800 whitespace-nowrap

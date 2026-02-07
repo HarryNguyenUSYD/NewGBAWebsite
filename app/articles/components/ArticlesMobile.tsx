@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { ArticlesTableType } from "@/backend/tables";
 import { fetchArticles } from "@/backend/fetchFunctions";
 import { ITEMS_PER_PAGE } from "./consts";
+import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function Articles() {
     const searchParams = useSearchParams();
@@ -67,9 +69,11 @@ const TitleSection = () => {
     )
 }
 
-const Post = ({ iframe } : { iframe: { src: string, width: number, height: number } }) => {
+const Post = ({ iframe } : { iframe: { src: string, width: number, height: number, url: string } }) => {
+    const languageContext = useLanguage();
+
     return (
-        <div className="w-full h-screen">
+        <div className="w-full h-screen flex flex-col justify-center items-end gap-3">
             <iframe
                 src={iframe.src}
                 width={iframe.width}
@@ -78,6 +82,15 @@ const Post = ({ iframe } : { iframe: { src: string, width: number, height: numbe
                 className="w-full h-full"
                 allowFullScreen
             ></iframe>
+            <Link
+                href={iframe.url ?? "/"}
+                target="_blank"
+                className="text-xl italic text-black duration-100 flex flex-row justify-center items-center gap-2
+                    px-3 border-2 border-black hover:bg-black hover:text-white"
+            >
+                {languageContext?.language === "en" ? "See on LinkedIn" : "Xem trên LinkedIn"}
+                <FaArrowRight className="text-sm" />
+            </Link>
         </div>
     );
 }

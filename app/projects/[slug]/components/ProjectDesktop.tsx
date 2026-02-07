@@ -111,12 +111,12 @@ const ListSection = ({ project } : { project: ProjectTableType | null }) => {
                 disableGallery={() => setIsShowingGallery(false)}
                 project={project}
             />}
-            <div className="w-full h-auto my-10 bg-white flex flex-row justify-center items-start gap-10">
-                <div className="w-[40%] h-auto flex flex-col justify-start items-center gap-10">
+            <div className="w-full h-auto my-10 bg-white flex flex-row justify-center items-start gap-15">
+                <div className="w-[35%] h-auto flex flex-col justify-start items-center gap-15">
                     {project?.images.slice(0, Math.ceil(length / 2)).map((image, i) => (
                         <button
                             key={`project_image_left_${i}`}
-                            className="w-full h-auto p-2 border-4 border-black hover:border-red-500 duration-150 cursor-pointer"
+                            className="w-full h-auto duration-150 cursor-pointer overflow-hidden shadow-lg/50 hover:scale-105"
                             onClick={() => {
                                 setIsShowingGallery(!isShowingGallery)
                                 setIndex(i);
@@ -132,11 +132,11 @@ const ListSection = ({ project } : { project: ProjectTableType | null }) => {
                         </button>
                     ))}
                 </div>
-                <div className="w-[40%] h-auto flex flex-col justify-start items-center gap-10">
+                <div className="w-[35%] h-auto flex flex-col justify-start items-center gap-15">
                     {project?.images.slice(Math.ceil(length / 2)).map((image, i) => (
                         <button
                             key={`project_image_left_${i}`}
-                            className="w-full h-auto p-2 border-4 border-black hover:border-red-500 duration-150 cursor-pointer"
+                            className="w-full h-auto duration-150 cursor-pointer overflow-hidden shadow-lg/50 hover:scale-105"
                             onClick={() => {
                                 setIsShowingGallery(!isShowingGallery)
                                 setIndex(i + Math.ceil(length / 2));

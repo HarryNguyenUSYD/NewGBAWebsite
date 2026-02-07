@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FiPhone, FiFileText } from "react-icons/fi";
-import { HiOutlineMail, HiOutlineDownload } from "react-icons/hi";
+import { HiOutlineMail } from "react-icons/hi";
 
 export default function Vendors() {
     const [vendors, setVendors] = useState<VendorsTableType | null>(null);
@@ -80,16 +80,6 @@ const JobListing = ({ dir, vendor } : { dir: string, vendor: VendorTableType }) 
                         <FiFileText />
                         {languageContext?.language == "en" ? "View Job Description" : "Xem mô tả công việc"}
                     </Link>
-                    <Link
-                        download={true}
-                        href={fetchImageOrFile(`${dir}${vendor.jobDescFileName}`)}
-                        className="w-auto flex flex-row justify-start items-center gap-3 text-2xl
-                            rounded-full bg-gray-200 px-5 py-1 hover:bg-red-500 hover:text-white duration-150"
-                        target="_blank"
-                    >
-                        <HiOutlineDownload />
-                        {languageContext?.language == "en" ? "Download Job Description" : "Tải mô tả công việc"}
-                    </Link>
                 </div>
             </div>
         </div>
@@ -117,20 +107,34 @@ const GuideSection = () => {
         <div
             className="w-[30vw] h-auto flex flex-col justify-start items-start gap-2 p-5
                 border rounded-2xl border-gray-700 text-black text-4xl">
-            <p>{languageContext?.language == "en" ? "Submit your CV to:" : "Gửi CV trực tiếp cho:"}</p>
+            <p>{languageContext?.language == "en" ? "Submit your Company Profile to:" : "Gửi Hồ sơ năng lực trực tiếp cho:"}</p>
             <div
                 className="text-3xl flex flex-row justify-start items-start gap-3 text-black
                     hover:text-red-500 duration-150"
             >
                 <HiOutlineMail />
-                <p>binh@gba.vn</p>
+                <p>viet.nguyen@gba.vn</p>
             </div>
             <div
                 className="text-3xl flex flex-row justify-start items-start gap-3 text-black
                     hover:text-red-500 duration-150"
             >
                 <FiPhone />
-                <p>+84 83843700</p>
+                <p>+84 902629651</p>
+            </div>
+            <div
+                className="text-3xl flex flex-row justify-start items-start gap-3 text-black
+                    hover:text-red-500 duration-150"
+            >
+                <HiOutlineMail />
+                <p>my.dinh@gba.vn</p>
+            </div>
+            <div
+                className="text-3xl flex flex-row justify-start items-start gap-3 text-black
+                    hover:text-red-500 duration-150"
+            >
+                <FiPhone />
+                <p>+84 976004080</p>
             </div>
         </div>
     )

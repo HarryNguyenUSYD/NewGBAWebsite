@@ -26,7 +26,7 @@ export default function ProjectGallery({
     }
 
     return (
-        <div className="fixed top-(--navbar-height) left-0 w-full h-[calc(100vh-var(--navbar-height))] backdrop-brightness-25
+        <div className="fixed z-9999 top-(--navbar-height) left-0 w-full h-[calc(100vh-var(--navbar-height))] backdrop-brightness-25
             flex flex-col justify-between items-center">
             <button
                 className="absolute top-5 right-5 p-2 m-2 cursor-pointer z-20 border-4 border-white rounded-full

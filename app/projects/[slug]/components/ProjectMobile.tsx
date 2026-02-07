@@ -114,7 +114,7 @@ const ListSection = ({ project } : { project: ProjectTableType | null }) => {
                 {project?.images.map((image, i) => (
                     <button
                         key={`project_image_left_${i}`}
-                        className="w-full h-auto p-2 border-4 border-black hover:border-red-500 duration-150 cursor-pointer"
+                        className="w-full h-auto duration-150 cursor-pointer overflow-hidden shadow-lg/50 hover:scale-105"
                         onClick={() => {
                             setIsShowingGallery(!isShowingGallery)
                             setIndex(i);

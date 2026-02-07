@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FiPhone, FiFileText } from "react-icons/fi";
-import { HiOutlineMail, HiOutlineDownload } from "react-icons/hi";
+import { HiOutlineMail } from "react-icons/hi";
 
 export default function Vendors() {
     const [vendors, setVendors] = useState<VendorsTableType | null>(null);
@@ -75,16 +75,6 @@ const JobListing = ({ dir, vendor } : { dir: string, vendor: VendorTableType }) 
                     <FiFileText />
                     {languageContext?.language == "en" ? "View Job Description" : "Xem mô tả công việc"}
                 </Link>
-                <Link
-                    download={true}
-                    href={fetchImageOrFile(`${dir}${vendor.jobDescFileName}`)}
-                    className="w-auto flex flex-row justify-start items-center gap-3 text-lg
-                        rounded-full bg-gray-200 px-5 py-1 hover:bg-red-500 hover:text-white duration-150"
-                    target="_blank"
-                >
-                    <HiOutlineDownload />
-                    {languageContext?.language == "en" ? "Download Job Description" : "Tải mô tả công việc"}
-                </Link>
             </div>
         </div>
     )
@@ -122,14 +112,28 @@ const GuideSection = () => {
                         hover:text-red-500 duration-150"
                 >
                     <HiOutlineMail />
-                    <p>binh@gba.vn</p>
+                    <p>viet.nguyen@gba.vn</p>
                 </div>
                 <div
                     className="text-xl flex flex-row justify-start items-start gap-3 text-black
                         hover:text-red-500 duration-150"
                 >
                     <FiPhone />
-                    <p>+84 83843700</p>
+                    <p>+84 902629651</p>
+                </div>
+                <div
+                    className="text-xl flex flex-row justify-start items-start gap-3 text-black
+                        hover:text-red-500 duration-150"
+                >
+                    <HiOutlineMail />
+                    <p>my.dinh@gba.vn</p>
+                </div>
+                <div
+                    className="text-xl flex flex-row justify-start items-start gap-3 text-black
+                        hover:text-red-500 duration-150"
+                >
+                    <FiPhone />
+                    <p>+84 976004080</p>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import { useLanguage } from "@/global/LanguageContext/LanguageContext";
 import SiteWrapper from "@/global/SiteWrapper/SiteWrapperDesktop";
 import Image from "next/image";
 import Link from "next/link";
-import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import { FaArrowRight, FaFacebook, FaLinkedin } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import type { ArticlesTableType } from "@/backend/tables";
 import { fetchArticles } from "@/backend/fetchFunctions";
@@ -74,9 +74,11 @@ const TitleSection = () => {
     )
 }
 
-const Post = ({ iframe } : { iframe: { src: string, width: number, height: number } }) => {
+const Post = ({ iframe } : { iframe: { src: string, width: number, height: number, url: string } }) => {
+    const languageContext = useLanguage();
+
     return (
-        <div className="w-[40vw] h-screen">
+        <div className="w-[40vw] h-screen flex flex-col justify-center items-end gap-5">
             <iframe
                 src={iframe.src}
                 width={iframe.width}
@@ -85,13 +87,22 @@ const Post = ({ iframe } : { iframe: { src: string, width: number, height: numbe
                 className="w-full h-full"
                 allowFullScreen
             ></iframe>
+            <Link
+                href={iframe.url ?? "/"}
+                target="_blank"
+                className="text-3xl italic text-black duration-100 flex flex-row justify-center items-center gap-3
+                    px-5 border-2 border-black hover:bg-black hover:text-white"
+            >
+                {languageContext?.language === "en" ? "See on LinkedIn" : "Xem trên LinkedIn"}
+                <FaArrowRight className="text-lg" />
+            </Link>
         </div>
     );
 }
 
 const ListSection = ({ articles, page } : { articles: ArticlesTableType | null, page: number }) => {
     return (
-        <div className="w-full h-auto mb-10 px-20 bg-white flex flex-col justify-start items-center gap-10">
+        <div className="w-full h-auto mb-10 px-20 bg-white flex flex-col justify-start items-center gap-15">
             {articles?.iframes.slice((page - 1) * ITEMS_PER_PAGE, (page - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE).map((iframe, i) => (<Post iframe={iframe} key={`article_${i}`} />))}
         </div> 
     )

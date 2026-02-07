@@ -31,7 +31,7 @@ export type ArticlesTableType = {
     newestProject: { title: string, url: string },
     newestAward: { title: string, url: string },
     newestEvent: { title: string, url: string },
-    iframes: { src: string, width: number, height: number }[]
+    iframes: { src: string, width: number, height: number, url: string }[]
 }
 
 export type CareerTableType = {

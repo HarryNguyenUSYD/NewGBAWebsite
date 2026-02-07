@@ -233,13 +233,13 @@ const ManagementSection = () => {
     }, [timer]);
 
     return (
-        <div className="w-full h-auto flex flex-col justify-center items-center gap-10 mt-10 mb-20">
+        <div className="w-full h-auto flex flex-col justify-center items-center gap-5 mt-10 mb-20">
             <p className={`${titleFont.className} text-6xl text-black`}>
                 {languageContext?.language == "en" ? "Our Management Team" : "Đội Ngũ Quản Lý"}
             </p>
             <div className="w-full h-auto overflow-hidden">
                 <motion.div
-                    className="w-auto h-auto my-10 flex flex-row justify-start items-center gap-[10vw]"
+                    className="w-auto h-[25vw] my-10 flex flex-row justify-start items-center gap-[10vw]"
                     style={{ x: `${50 - 10.5}vw` }}
                     animate={{ translateX: `-${index * (15 + 10)}vw` }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
